@@ -169,7 +169,7 @@ done
 # //////////////////////////////////////////////////////////////////////////////
 # SET REGION PROPERTIES
 	#these are default for GREECE REGION
-	gmtset PS_MEDIA 26cx22c
+	gmtset PS_MEDIA 26cx29c
 	frame=2
 	scale="-Lf20/33.5/36:24/100+l+jr"
 	range="-R$west/$east/$south/$north"
@@ -188,7 +188,7 @@ fi
 if [ "$TOPOGRAPHY" -eq 0 ]
 then
 	################## Plot coastlines only ######################	
-	psbasemap $range $proj $scale -B$frame:."$maptitle": -P -K > $outfile
+	psbasemap $range $proj $scale -B$frame:."$maptitle": -P -K -Y12 > $outfile
 	pscoast -R -J -O -K -W0.25 -G195 -Df -Na -U$logo_pos >> $outfile
 # 	pscoast -Jm -R -Df -W0.25p,black -G195  -U$logo_pos -K -O -V >> $outfile
 # 	psbasemap -R -J -O -K --FONT_ANNOT_PRIMARY=10p $scale --FONT_LABEL=10p >> $outfile
@@ -198,7 +198,7 @@ then
 	# ####################### TOPOGRAPHY ###########################
 	# bathymetry
 	makecpt -Cgebco.cpt -T-7000/0/150 -Z > $bathcpt
-	grdimage $inputTopoB $range $proj -C$bathcpt -K > $outfile
+	grdimage $inputTopoB $range $proj -C$bathcpt -K -Y12> $outfile
 	pscoast $proj -P $range -Df -Gc -K -O >> $outfile
 	# land
 	makecpt -Cgray.cpt -T-3000/1800/50 -Z > $landcpt
@@ -289,19 +289,24 @@ psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 
 
 # ////////////////////////////////////////////////////PLOT PROJECTION!!! ////////////////////////////////
-# awk '{print($4,$3,$5)}' $seis_data | project -C21/36 -A45 -W-.2/.2 -L0/4 -H15 > projection.dat
-# 
-# 
-# east=25
-# west=21 
-# dmin=0 
-# dmax=50
-# 
-# proj=-JX15/-5
-# tick=-B1:Longitude:/10:Depth:WSen
-# 
-# 
-# awk '{print($6,$3)}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.2 -G200 -O  -Y-8 -P >> $out
+awk '{print($8,$7,$9)}' tmp-eq45 | project -C21/36 -A0 -W-.2/.2 -L0/4 > projection.dat
+
+
+east=25
+west=21 
+dmin=0 
+dmax=100
+
+proj=-JX15/-5
+tick=-B1:Longitude:/10:Depth:WSen
+
+
+awk '{print($6,$3)}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.2 -G200 -O  -Y-8 -P -K >> $outfile
+
+# ////////////////////////////////////////////////////PLOT PROJECTION!!! ////////////////////////////////
+
+
+
 echo "G 0.2c" >> .legend
 echo "D 0.3c 1p" >> .legend
 echo "G 0.5c" >> .legend
