@@ -69,18 +69,18 @@ maptitle=""
 # //////////////////////////////////////////////////////////////////////////////
 # Set default REGION for GREECE
 west=19
-east=29
-south=34
+east=30.6
+south=33
 north=42
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set default magnitude interval
-minmw=4
+minmw=4.5
 maxmw=10
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set default time period
-starty=1980
+starty=2000
 stopy=2015
 
 # //////////////////////////////////////////////////////////////////////////////
@@ -163,19 +163,19 @@ done
 # topo=../../dems/greeceSRTM.grd			# ETOPO1 topography grid
 
 
-tick='-B2/2WSen'
-
-proj='-Jm24/37/1:6000000'
+# tick='-B2/2WSen'
+# 
+# proj='-Jm24/37/1:6000000'
 # //////////////////////////////////////////////////////////////////////////////
 # SET REGION PROPERTIES
-	gmtset PS_MEDIA 21cx29c
+	gmtset PS_MEDIA 26cx21c
 	frame=2
-	scale=-Lf20/34.5/36:24/100+l+jr
+	scale=-Lf20/33.5/36:24/100+l+jr
 	range=-R$west/$east/$south/$north
 	proj=-Jm24/37/1:6000000
-	logo_pos=BL/19c/0.2c/"NOA Catalogue"
-	logo_pos2="-C14.8c/0.1c"
-	legendc="-Jx1i -R0/8/0/8 -Dx0.3c/0.6c/3.6c/4.3c/BL"	
+	logo_pos=BL/6c/3.5c/"NOA Catalogue"
+	logo_pos2="-C16.8c/15.1c"
+	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.3c/BL"	
 	
 # //////////////////////////////////////////////////////////////////////////////
 # UPDATE NOA CATALOGUE
@@ -187,25 +187,25 @@ fi
 if [ "$TOPOGRAPHY" -eq 0 ]
 then
 	################## Plot coastlines only ######################	
-	pscoast $range $proj -B$frame:."$maptitle": -Df -W0.5/0/0/0 -G195 -Na  -U$logo_pos -K -Y12 > $outfile
-	psbasemap -R -J -O -K --FONT_ANNOT_PRIMARY=10p $scale --FONT_LABEL=10p >> $outfile
+	psbasemap $range $proj $scale -B$frame:."$maptitle": -P -K > $outfile
+	pscoast -Jm -R -Df -W0.25p,black -G195  -U$logo_pos -K -O -V >> $outfile
+# 	psbasemap -R -J -O -K --FONT_ANNOT_PRIMARY=10p $scale --FONT_LABEL=10p >> $outfile
 fi
 if [ "$TOPOGRAPHY" -eq 1 ]
 then
 	# ####################### TOPOGRAPHY ###########################
 	# bathymetry
 	makecpt -Cgebco.cpt -T-7000/0/150 -Z > $bathcpt
-	grdimage $inputTopoB $range $proj -C$bathcpt -K -Y12 > $outfile
+	grdimage $inputTopoB $range $proj -C$bathcpt -K > $outfile
 	pscoast $proj -P $range -Df -Gc -K -O >> $outfile
 	# land
 	makecpt -Cgray.cpt -T-3000/1800/50 -Z > $landcpt
 	grdimage $inputTopoL $range $proj -C$landcpt  -K -O >> $outfile
 	pscoast -R -J -O -K -Q >> $outfile
 	#------- coastline -------------------------------------------
-	psbasemap -R -J -O -K --FONT_ANNOT_PRIMARY=10p $scale --FONT_LABEL=10p >> $outfile
-	pscoast -Jm -R -B$frame:."$maptitle": -Df -Na  -W -K  -O -U$logo_pos >> $outfile
+	psbasemap -R -J -O -K -B$frame:."$maptitle": --FONT_ANNOT_PRIMARY=10p $scale --FONT_LABEL=10p >> $outfile
+	pscoast -J -R -Df -W0.25p,black -K  -O -U$logo_pos >> $outfile
 fi
-
 
 # psbasemap -R$west/$east/$south/$north $proj $tick -P -Y12 -K > $out
 # 
@@ -215,17 +215,67 @@ fi
 # 
 # pscoast -R -J -O -K -W2 -Df -Na -Ia -Lf-130.8/46/10/200+lkm >> $out
 
-makecpt -Crainbow -T0/50/10 -Z > seis.cpt
+#////////////////////////////////////////////////////////////////
+#create temporary earthquake files
+#split by years
+awk 'NR != 2 {if ($1>='$starty' && $1<'$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
+# awk 'NR != 0 {if ($10>='$minmw' && $10<'$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
+awk 'NR != 0 {if ($10>=0 && $10<2) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq02
+awk 'NR != 0 {if ($10>=2 && $10<3) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq23
+awk 'NR != 0 {if ($10>=3 && $10<4) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq34
+awk 'NR != 0 {if ($10>=4 && $10<5) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq45
+awk 'NR != 0 {if ($10>=5 && $10<6) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq56
+awk 'NR != 0 {if ($10>=6 && $10<8) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq68
 
-awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out 
+# start create legend file .legend
+echo "G 0.2c" > .legend
+# echo "H 10 Times-Roman FROM: $starty" >> .legend
+# echo "H 10 Times-Roman   TO: $stopy" >> .legend
+echo "G 0.2c" > .legend
 
-psscale -D0/3.2/6/1 -B10:Depth:/:km: -Cseis.cpt -O -K >> $out
+echo "H 9 Times-Roman Magnitude" >> .legend
+echo "D 0.3c 1p" >> .legend
+echo "N 1" >> .legend
 
-psxy center.dat -R -J -O -K -W1 -Sc.3 -G255/0/0 >> $out
-psxy center.dat -R -J -O -K -W5/255/0/0 >> $out
+#////////////////////////////////////////////////////////////////
+#plot 
 
 
-# ////////////////////////////////////////////////////PLOT PROJRCTION!!! /\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+makecpt -Cseis -T0/150/10 -Z > seis2.cpt
+
+awk '{print $8,$7,$9}' tmp-eq02 | psxy -R -J -O -K  -W.1 -Sc.05 -Cseis2.cpt>> $outfile
+echo "G 0.25c" >> .legend
+echo "S 0.4c c 0.05 160 0.22p 0.9c Mw < 2" >> .legend
+
+awk '{print $8,$7,$9}' tmp-eq23 | psxy -R -J -O -K  -W.1 -Sc.09 -Cseis2.cpt>> $outfile
+echo "G 0.25c" >> .legend
+echo "S 0.4c c 0.09 160 0.22p 0.9c 2 =< Mw < 3" >> .legend
+
+awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
+echo "G 0.25c" >> .legend
+echo "S 0.4c c 0.11 160 0.22p 0.9c 3 =< Mw < 4" >> .legend
+
+awk '{print $8,$7,$9}' tmp-eq45 | psxy -R -J -O -K  -W.1 -Sc.15 -Cseis2.cpt>> $outfile
+echo "G 0.25c" >> .legend
+echo "S 0.4c c 0.15 160 0.22p 0.9c 4 =< Mw < 5" >> .legend
+
+awk '{print $8,$7,$9}' tmp-eq56 | psxy -R -J -O -K  -W.1 -Sc.25 -Cseis2.cpt>> $outfile
+echo "G 0.25c" >> .legend
+echo "S 0.4c c 0.25 160 0.22p 0.9c 5 =< Mw < 6" >> .legend
+
+awk '{print $8,$7,$9}' tmp-eq68 | psxy -R -J -O -K  -W.1 -Sa.8 -Cseis2.cpt >> $outfile
+echo "G 0.25c" >> .legend
+echo "S 0.4c a 0.8 160 0.22p 0.9c 6 =< Mw" >> .legend
+
+# awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out 
+
+psscale -D19.2c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
+
+# psxy center.dat -R -J -O -K -W1 -Sc.3 -G255/0/0 >> $out
+# psxy center.dat -R -J -O -K -W5/255/0/0 >> $out
+
+
+# ////////////////////////////////////////////////////PLOT PROJECTION!!! ////////////////////////////////
 # awk '{print($4,$3,$5)}' $seis_data | project -C21/36 -A45 -W-.2/.2 -L0/4 -H15 > projection.dat
 # 
 # 
@@ -239,6 +289,17 @@ psxy center.dat -R -J -O -K -W5/255/0/0 >> $out
 # 
 # 
 # awk '{print($6,$3)}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.2 -G200 -O  -Y-8 -P >> $out
+echo "G 0.2c" >> .legend
+echo "D 0.3c 1p" >> .legend
+echo "G 0.5c" >> .legend
+# echo "B seis2.cpt 0.2i 0.2i" >> .legend
+echo "T Earthquake data automated recovered via NOA catalogue" >> .legend
+
+# ///////////////// PLOT LEGEND //////////////////////////////////
+if [ "$LEGEND" -eq 1 ]
+then
+        pslegend .legend ${legendc} -C0.1c/0.1c -L1.3 -O -K >> $outfile
+fi
 
 #/////////////////PLOT LOGO DSO
 psimage $pth2logos/DSOlogo2.eps -O $logo_pos2 -W1.1c -F0.4 >>$outfile

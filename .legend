@@ -1,0 +1,20 @@
+G 0.2c
+H 9 Times-Roman Magnitude
+D 0.3c 1p
+N 1
+G 0.25c
+S 0.4c c 0.05 160 0.22p 0.9c Mw < 2
+G 0.25c
+S 0.4c c 0.09 160 0.22p 0.9c 2 =< Mw < 3
+G 0.25c
+S 0.4c c 0.11 160 0.22p 0.9c 3 =< Mw < 4
+G 0.25c
+S 0.4c c 0.15 160 0.22p 0.9c 4 =< Mw < 5
+G 0.25c
+S 0.4c c 0.25 160 0.22p 0.9c 5 =< Mw < 6
+G 0.25c
+S 0.4c a 0.8 160 0.22p 0.9c 6 =< Mw
+G 0.2c
+D 0.3c 1p
+G 0.5c
+T Earthquake data automated recovered via NOA catalogue
