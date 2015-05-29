@@ -53,8 +53,8 @@ UPDCAT=0
 # Set PATHS parameters
 pth2dems=${HOME}/Map_project/dems
 # pth2nets=${HOME}/Map_project/4802_SEISMO/networks
-inputTopoL=${pth2dems}/greeceSRTM.grd #ETOPO1_Bed_g_gmt4.grd
-inputTopoB=${pth2dems}/greeceSRTM.grd #ETOPO1_Bed_g_gmt4.grd
+inputTopoL=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
+inputTopoB=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
 pth2logos=$HOME/Map_project/logos
 
 
@@ -222,7 +222,8 @@ fi
 #select with years
 awk 'NR != 2 {if ($1>='$starty' && $1<'$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
 #select with magnitude
-awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
+# awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
+cat tmp-eq1>tmp-eq2
 #split to magnitude categories
 awk 'NR != 0 {if ($10>=0 && $10<2) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq02
 awk 'NR != 0 {if ($10>=2 && $10<3) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq23
