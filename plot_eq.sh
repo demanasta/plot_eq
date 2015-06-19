@@ -12,6 +12,7 @@ function help {
         echo "           -mt [:= map title] title map default none use quotes"
         echo "           -updcat [:= update catalogue] title map default none use quotes"
         echo "           -topo [:= update catalogue] title map default none use quotes"
+        echo "           -faults [:= faults] plot NOA fault database"
 
         echo "/*** EARTHQUAKE OPTIONS **********************************************************/"
         echo "           -minmw [:= minimum magnitude]  bug use only int"
@@ -44,10 +45,12 @@ gmtset FONT_ANNOT_PRIMARY 10 FONT_LABEL 10 MAP_FRAME_WIDTH 0.12c FONT_TITLE 18p
 # Pre-defined parameters for bash script
 # REGION="greece"
 TOPOGRAPHY=0
+FAULTS=0
 LABELS=0
 OUTJPG=0
 LEGEND=0
 UPDCAT=0
+
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set PATHS parameters
@@ -56,6 +59,7 @@ pth2dems=${HOME}/Map_project/dems
 inputTopoL=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
 inputTopoB=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
 pth2logos=$HOME/Map_project/logos
+pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
 
 
 # //////////////////////////////////////////////////////////////////////////////
@@ -132,6 +136,10 @@ do
 			TOPOGRAPHY=1
 			shift
 			;;
+		-faults)
+			FAULTS=1
+			shift
+			;;			
 		-o)
 			outfile=${2}.eps
 			out_jpg=${2}.jpg
@@ -216,6 +224,14 @@ fi
 # grdimage $topo -R -J -O -K -Ctopo.cpt   >> $out
 # 
 # pscoast -R -J -O -K -W0.25 -G195 -Df -Na -Ia -Lf-130.8/46/10/200+lkm >> $outfile
+
+#////////////////////////////////////////////////////////////////
+#  PLOT NOA CATALOGUE FAULTS Ganas et.al, 2013
+if [ "$FAULTS" -eq 1 ]
+then
+	echo "plot NOA FAULTS CATALOGUE Ganas et.al, 2013"
+	psxy $pth2faults -R -J -O -K  -W.5,204/102/0  >> $outfile
+fi
 
 #////////////////////////////////////////////////////////////////
 #create temporary earthquake files
@@ -324,3 +340,6 @@ then
 	gs -sDEVICE=jpeg -dJPEGQ=100 -dNOPAUSE -dBATCH -dSAFER -r300 -sOutputFile=$out_jpg $outfile
 fi
 
+# NOA FAULTS reference
+# Ganas Athanassios, Oikonomou Athanassia I., and Tsimi Christina, 2013. NOAFAULTS: a digital database for active faults in Greece. Bulletin of
+#  the Geological Society of Greece, vol. XLVII and Proceedings of the 13th International Congress, Chania, Sept. 2013.
