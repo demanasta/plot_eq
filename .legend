@@ -10,5 +10,8 @@ G 0.25c
 S 0.4c a 0.8c 160 0.22p 0.9c 6 =< Mw
 G 0.2c
 D 0.3c 1p
-G 0.5c
+G 0.3c
 T Earthquake data automated recovered via NOA catalogue
+G 1.6c
+D 0.3c 1p
+T NOA FAULTS CATALOGUE after Ganas et.al, 2013

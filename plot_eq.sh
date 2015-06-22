@@ -9,6 +9,7 @@ function help {
 	echo " Usage   : plot_eq.sh -r west east south north |  | -o [output] | -jpg "
 	echo " Switches: "
         echo "           -r [:= region] region to plot west east south north (default Greece)"
+        echo "                   use: -r west east south north projscale frame"
         echo "           -mt [:= map title] title map default none use quotes"
         echo "           -updcat [:= update catalogue] title map default none use quotes"
         echo "           -topo [:= update catalogue] title map default none use quotes"
@@ -76,6 +77,8 @@ west=19
 east=30.6
 south=33
 north=42
+projscale=6000000
+frame=2
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set default magnitude interval
@@ -98,7 +101,18 @@ while [ $# -gt 0 ]
 do
 	case "$1" in
 		-r)
-			REGION=$2
+			west=$2
+			east=$3
+			south=$4
+			north=$5
+			projscale=$6
+			frame=$7
+# 			REGION=$2
+			shift
+			shift
+			shift
+			shift
+			shift
 			shift
 			shift
 			;;
@@ -178,10 +192,9 @@ done
 # SET REGION PROPERTIES
 	#these are default for GREECE REGION
 	gmtset PS_MEDIA 26cx22c
-	frame=2
 	scale="-Lf20/33.5/36:24/100+l+jr"
 	range="-R$west/$east/$south/$north"
-	proj="-Jm24/37/1:6000000"
+	proj="-Jm24/37/1:$projscale"
 	logo_pos="BL/6c/-1.5c/DSO[at]ntua"
 	logo_pos2="-C16c/15.6c"
 	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"	
@@ -321,9 +334,12 @@ psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 # awk '{print($6,$3)}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.2 -G200 -O  -Y-8 -P >> $out
 echo "G 0.2c" >> .legend
 echo "D 0.3c 1p" >> .legend
-echo "G 0.5c" >> .legend
+echo "G 0.3c" >> .legend
 # echo "B seis2.cpt 0.2i 0.2i" >> .legend
 echo "T Earthquake data automated recovered via NOA catalogue" >> .legend
+echo "G 1.6c" >> .legend
+echo "D 0.3c 1p" >> .legend
+echo "T NOA FAULTS CATALOGUE after Ganas et.al, 2013" >> .legend
 
 # ///////////////// PLOT LEGEND //////////////////////////////////
 if [ "$LEGEND" -eq 1 ]
