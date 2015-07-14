@@ -14,11 +14,12 @@ function help {
         echo "           -updcat [:= update catalogue] title map default none use quotes"
         echo "           -topo [:= update catalogue] title map default none use quotes"
         echo "           -faults [:= faults] plot NOA fault database"
+        echo "           -histeq [:= historic eq ] plot historical eq via papazachos catalogue"
 
         echo "/*** EARTHQUAKE OPTIONS **********************************************************/"
         echo "           -minmw [:= minimum magnitude]  bug use only int"
         echo "           -maxmw [:= maximum magnitude]  bug use only int"
-                echo "           -starty [:= start year] "
+	echo "           -starty [:= start year] "
 	echo "           -stopy [:= stop year] "
 
 
@@ -51,6 +52,7 @@ LABELS=0
 OUTJPG=0
 LEGEND=0
 UPDCAT=0
+HISTEQ=0
 
 
 # //////////////////////////////////////////////////////////////////////////////
@@ -153,7 +155,11 @@ do
 		-faults)
 			FAULTS=1
 			shift
-			;;			
+			;;	
+		-histeq)
+			HISTEQ=1
+			shift
+			;;
 		-o)
 			outfile=${2}.eps
 			out_jpg=${2}.jpg
@@ -242,8 +248,18 @@ fi
 #  PLOT NOA CATALOGUE FAULTS Ganas et.al, 2013
 if [ "$FAULTS" -eq 1 ]
 then
-	echo "plot NOA FAULTS CATALOGUE Ganas et.al, 2013"
+	echo "plot NOA FAULTS CATALOGUE Ganas et.al, 2013 ..."
 	psxy $pth2faults -R -J -O -K  -W.5,204/102/0  >> $outfile
+fi
+
+#////////////////////////////////////////////////////////////////
+#  PLOT Historic catalogue, Papazachos
+if [ "$HISTEQ" -eq 1 ]
+then
+# 	awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
+	echo "plot HISTORIC Earthquakes, Papazachos ana Papazacho catalogue"
+	awk -F, '{print $5,$4,$7}' papazachos_db | psxy -R -J -O -K  -W.1 -Ss.11 -Gblack >> $outfile
+	
 fi
 
 #////////////////////////////////////////////////////////////////
@@ -356,6 +372,13 @@ then
 	gs -sDEVICE=jpeg -dJPEGQ=100 -dNOPAUSE -dBATCH -dSAFER -r300 -sOutputFile=$out_jpg $outfile
 fi
 
+# ///////////////// REMOVE TMP FILES //////////////////////////////////
+rm tmp-*
+rm .legend
+rm *cpt
+
 # NOA FAULTS reference
 # Ganas Athanassios, Oikonomou Athanassia I., and Tsimi Christina, 2013. NOAFAULTS: a digital database for active faults in Greece. Bulletin of
 #  the Geological Society of Greece, vol. XLVII and Proceedings of the 13th International Congress, Chania, Sept. 2013.
+
+# historic eq papazachos reference
