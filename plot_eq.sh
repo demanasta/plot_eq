@@ -32,7 +32,7 @@ function help {
 	echo " Exit Status:   -2 -> help message or error"
 	echo " Exit Status: >= 0 -> sucesseful exit"
 	echo ""
-	echo "run:"
+	echo "run: ./plot_eq.sh -topo -faults -jpg -leg"
 	echo "/******************************************************************************/"
 	exit -2
 }
@@ -67,8 +67,8 @@ pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set default files
-outfile=test.eps
-out_jpg=test.jpg
+outfile=plot_eq.eps
+out_jpg=plot_eq.jpg
 landcpt=land_man.cpt
 bathcpt=bath_man.cpt
 # maptitle=""
@@ -90,7 +90,7 @@ maxmw=10
 # //////////////////////////////////////////////////////////////////////////////
 # Set default time period
 starty=2000
-stopy=2015
+stopy=$(date --date="-1 day" +%Y)
 
 # //////////////////////////////////////////////////////////////////////////////
 # GET COMMAND LINE ARGUMENTS
