@@ -1,11 +1,11 @@
 # GMT 5 Session common arguments shelf
 BEGIN GMT 5.1.3
-B	50:Depth:/:km:
+B	50:Distance(km):/10:Depth:WSen
 J	x
 Jm	m24/37/1:6000000
-JX	X15/-5
+JX	X17.5/-5
 Jx	x1i
 R	0/8/0/8
-Y	-8
-L	16
+Y	-6.5c
+L	18
 END

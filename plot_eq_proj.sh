@@ -9,14 +9,17 @@ function help {
 	echo " Usage   : plot_eq.sh -r west east south north |  | -o [output] | -jpg "
 	echo " Switches: "
         echo "           -r [:= region] region to plot west east south north (default Greece)"
+        echo "                   use: -r west east south north projscale frame"
         echo "           -mt [:= map title] title map default none use quotes"
         echo "           -updcat [:= update catalogue] title map default none use quotes"
         echo "           -topo [:= update catalogue] title map default none use quotes"
+        echo "           -faults [:= faults] plot NOA fault database"
+        echo "           -histeq [:= historic eq ] plot historical eq via papazachos catalogue"
 
         echo "/*** EARTHQUAKE OPTIONS **********************************************************/"
         echo "           -minmw [:= minimum magnitude]  bug use only int"
         echo "           -maxmw [:= maximum magnitude]  bug use only int"
-                echo "           -starty [:= start year] "
+	echo "           -starty [:= start year] "
 	echo "           -stopy [:= stop year] "
 
 
@@ -29,7 +32,7 @@ function help {
 	echo " Exit Status:   -2 -> help message or error"
 	echo " Exit Status: >= 0 -> sucesseful exit"
 	echo ""
-	echo "run:"
+	echo "run: ./plot_eq.sh -topo -faults -jpg -leg"
 	echo "/******************************************************************************/"
 	exit -2
 }
@@ -44,24 +47,28 @@ gmtset FONT_ANNOT_PRIMARY 10 FONT_LABEL 10 MAP_FRAME_WIDTH 0.12c FONT_TITLE 18p
 # Pre-defined parameters for bash script
 # REGION="greece"
 TOPOGRAPHY=0
+FAULTS=0
 LABELS=0
 OUTJPG=0
 LEGEND=0
 UPDCAT=0
+HISTEQ=0
+
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set PATHS parameters
 pth2dems=${HOME}/Map_project/dems
 # pth2nets=${HOME}/Map_project/4802_SEISMO/networks
-inputTopoL=${pth2dems}/greeceSRTM.grd #ETOPO1_Bed_g_gmt4.grd
-inputTopoB=${pth2dems}/greeceSRTM.grd #ETOPO1_Bed_g_gmt4.grd
+inputTopoL=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
+inputTopoB=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
 pth2logos=$HOME/Map_project/logos
+pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
 
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set default files
-outfile=test.eps
-out_jpg=test.jpg
+outfile=plot_eq.eps
+out_jpg=plot_eq.jpg
 landcpt=land_man.cpt
 bathcpt=bath_man.cpt
 # maptitle=""
@@ -72,6 +79,8 @@ west=19
 east=30.6
 south=33
 north=42
+projscale=6000000
+frame=2
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set default magnitude interval
@@ -81,7 +90,7 @@ maxmw=10
 # //////////////////////////////////////////////////////////////////////////////
 # Set default time period
 starty=2000
-stopy=2015
+stopy=$(date --date="-1 day" +%Y)
 
 # //////////////////////////////////////////////////////////////////////////////
 # GET COMMAND LINE ARGUMENTS
@@ -94,7 +103,18 @@ while [ $# -gt 0 ]
 do
 	case "$1" in
 		-r)
-			REGION=$2
+			west=$2
+			east=$3
+			south=$4
+			north=$5
+			projscale=$6
+			frame=$7
+# 			REGION=$2
+			shift
+			shift
+			shift
+			shift
+			shift
 			shift
 			shift
 			;;
@@ -130,6 +150,14 @@ do
 		-topo)
 #                       switch topo not used in server!
 			TOPOGRAPHY=1
+			shift
+			;;
+		-faults)
+			FAULTS=1
+			shift
+			;;	
+		-histeq)
+			HISTEQ=1
 			shift
 			;;
 		-o)
@@ -169,14 +197,13 @@ done
 # //////////////////////////////////////////////////////////////////////////////
 # SET REGION PROPERTIES
 	#these are default for GREECE REGION
-	gmtset PS_MEDIA 26cx29c
-	frame=2
+	gmtset PS_MEDIA 26cx28c
 	scale="-Lf20/33.5/36:24/100+l+jr"
 	range="-R$west/$east/$south/$north"
-	proj="-Jm24/37/1:6000000"
-	logo_pos="BL/6c/-1.5c/DSO[at]ntua"
+	proj="-Jm24/37/1:$projscale"
+	logo_pos="BL/6c/0.2c/DSO[at]ntua"
 	logo_pos2="-C16c/15.6c"
-	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"	
+	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/19.6c/3.6c/3.5c/BL"	
 	maptitle="Seismicity from $starty to $stopy"
 # //////////////////////////////////////////////////////////////////////////////
 # UPDATE NOA CATALOGUE
@@ -188,7 +215,7 @@ fi
 if [ "$TOPOGRAPHY" -eq 0 ]
 then
 	################## Plot coastlines only ######################	
-	psbasemap $range $proj $scale -B$frame:."$maptitle": -P -K -Y12 > $outfile
+	psbasemap $range $proj $scale -B$frame:."$maptitle": -P -K > $outfile
 	pscoast -R -J -O -K -W0.25 -G195 -Df -Na -U$logo_pos >> $outfile
 # 	pscoast -Jm -R -Df -W0.25p,black -G195  -U$logo_pos -K -O -V >> $outfile
 # 	psbasemap -R -J -O -K --FONT_ANNOT_PRIMARY=10p $scale --FONT_LABEL=10p >> $outfile
@@ -198,7 +225,7 @@ then
 	# ####################### TOPOGRAPHY ###########################
 	# bathymetry
 	makecpt -Cgebco.cpt -T-7000/0/150 -Z > $bathcpt
-	grdimage $inputTopoB $range $proj -C$bathcpt -K -Y12> $outfile
+	grdimage $inputTopoB $range $proj -C$bathcpt -K  -Y8.5c> $outfile
 	pscoast $proj -P $range -Df -Gc -K -O >> $outfile
 	# land
 	makecpt -Cgray.cpt -T-3000/1800/50 -Z > $landcpt
@@ -218,11 +245,30 @@ fi
 # pscoast -R -J -O -K -W0.25 -G195 -Df -Na -Ia -Lf-130.8/46/10/200+lkm >> $outfile
 
 #////////////////////////////////////////////////////////////////
+#  PLOT NOA CATALOGUE FAULTS Ganas et.al, 2013
+if [ "$FAULTS" -eq 1 ]
+then
+	echo "plot NOA FAULTS CATALOGUE Ganas et.al, 2013 ..."
+	psxy $pth2faults -R -J -O -K  -W.5,204/102/0  >> $outfile
+fi
+
+#////////////////////////////////////////////////////////////////
+#  PLOT Historic catalogue, Papazachos
+if [ "$HISTEQ" -eq 1 ]
+then
+# 	awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
+	echo "plot HISTORIC Earthquakes, Papazachos ana Papazacho catalogue"
+	awk -F, '{print $5,$4,$7}' papazachos_db | psxy -R -J -O -K  -W.1 -Ss.11 -Gblack >> $outfile
+	
+fi
+
+#////////////////////////////////////////////////////////////////
 #create temporary earthquake files
 #select with years
 awk 'NR != 2 {if ($1>='$starty' && $1<'$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
 #select with magnitude
-awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
+# awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
+cat tmp-eq1>tmp-eq2
 #split to magnitude categories
 awk 'NR != 0 {if ($10>=0 && $10<2) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq02
 awk 'NR != 0 {if ($10>=2 && $10<3) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq23
@@ -289,19 +335,52 @@ psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 
 
 # ////////////////////////////////////////////////////PLOT PROJECTION!!! ////////////////////////////////
-awk '{print($8,$7,$9)}' tmp-eq45 | project -C21/36 -A0 -W-.2/.2 -L0/4 > projection.dat
+# awk '{print($4,$3,$5)}' $seis_data | project -C21/36 -A45 -W-.2/.2 -L0/4 -H15 > projection.dat
+# 
+# 
+# east=25
+# west=21 
+# dmin=0 
+# dmax=50
+# 
+# proj=-JX15/-5
+# tick=-B1:Longitude:/10:Depth:WSen
+# 
+# 
+# awk '{print($6,$3)}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.2 -G200 -O  -Y-8 -P >> $out
+echo "G 0.2c" >> .legend
+echo "D 0.3c 1p" >> .legend
+echo "G 0.3c" >> .legend
+# echo "B seis2.cpt 0.2i 0.2i" >> .legend
+echo "T Earthquake data automated recovered via NOA catalogue" >> .legend
+echo "G 1.6c" >> .legend
+echo "D 0.3c 1p" >> .legend
+echo "T NOA FAULTS CATALOGUE after Ganas et.al, 2013" >> .legend
 
 
-east=25
-west=21 
+# ////////////////////////////////////////////////////PLOT PROJECTION!!! ////////////////////////////////
+# psxy  -R -J -O -K -W5/255/0/0 <<EOF>> $outfile
+# 21 36
+# 25 40
+# EOF
+
+# awk '{print($8,$7,$9)}' tmp-eq45 | project -C21/36 -A90 -W-1/1 -L0/4 > projection.dat
+awk '{print($8,$7,$9)}' tmp-eq34 | project -C20/34 -A10 -Fxyzpqrs -W-100/100 -L0/600  -V -Q> projection.dat
+awk '{print $1, $2}' projection.dat |  psxy -R -J -O -K -Sc0.1 -G0/0/0 >>$outfile
+awk '{print $6,$7}' projection.dat | psxy -R -J -O -K -Sc0.1 -G0/0/255 >>$outfile
+
+west=0
+east=600
 dmin=0 
 dmax=100
 
-proj=-JX15/-5
-tick=-B1:Longitude:/10:Depth:WSen
+proj=-JX17.5/-5
+tick=-B50:Distance\(km\):/10:Depth:WSen
+# proj="-Jx0.2/0.2"
+# tick="-Ba5f5g0/a5f5g0"
 
 
-awk '{print($6,$3)}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.2 -G200 -O  -Y-8 -P -K >> $outfile
+awk '{print $4,$3}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.1 -G200 -O  -Y-6.5c -P -K >> $outfile
 
 # ////////////////////////////////////////////////////PLOT PROJECTION!!! ////////////////////////////////
 
