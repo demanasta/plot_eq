@@ -6,7 +6,7 @@ function help {
 	echo " Program Name : plot_eq.sh"
 	echo " Version : v-0.1"
 	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
-	echo " Usage   : plot_eq.sh -r west east south north |  | -o [output] | -jpg "
+	echo " Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg "
 	echo " Switches: "
         echo "           -r [:= region] region to plot west east south north (default Greece)"
         echo "                   use: -r west east south north projscale frame"
@@ -34,6 +34,7 @@ function help {
 	echo ""
 	echo "run: ./plot_eq.sh -topo -faults -jpg -leg"
 	echo "/******************************************************************************/"
+	exit 1
 }
 
 # //////////////////////////////////////////////////////////////////////////////
