@@ -29,7 +29,7 @@ function help {
         echo "           -leg [:=legend] insert legends"
 	echo "           -jpg : convert eps file to jpg"
 	echo "           -h [:= help] help menu"
-	echo " Exit Status:   1 -> help message or error"
+	echo " Exit Status:    1 -> help message or error"
 	echo " Exit Status: >= 0 -> sucesseful exit"
 	echo ""
 	echo "run: ./plot_eq.sh -topo -faults -jpg -leg"
