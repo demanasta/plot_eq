@@ -4,3 +4,5 @@ full_NOA.catalogue
 *.png
 *.cpt
 tmp*
+gmt.history
+gmt.conf
