@@ -1,0 +1,18 @@
+#!/bin/bash
+#use this file to cheange default parameters for plots
+# //////////////////////////////////////////////////////////////////////////////
+# Set PATHS parameters
+pth2dems=${HOME}/Map_project/dems
+inputTopoL=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
+inputTopoB=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
+pth2logos=$HOME/Map_project/logos
+pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
+
+# //////////////////////////////////////////////////////////////////////////////
+# Set default REGION for GREECE
+west=19
+east=30.6
+south=33
+north=42
+projscale=6000000
+frame=2

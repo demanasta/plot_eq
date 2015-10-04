@@ -58,14 +58,16 @@ UPDCAT=0
 HISTEQ=0
 EQPROJ=0
 
-# //////////////////////////////////////////////////////////////////////////////
-# Set PATHS parameters
-pth2dems=${HOME}/Map_project/dems
-# pth2nets=${HOME}/Map_project/4802_SEISMO/networks
-inputTopoL=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
-inputTopoB=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
-pth2logos=$HOME/Map_project/logos
-pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
+#LOAD DEFAULT PARAMETERS
+source default-param
+# # //////////////////////////////////////////////////////////////////////////////
+# # Set PATHS parameters
+# pth2dems=${HOME}/Map_project/dems
+# # pth2nets=${HOME}/Map_project/4802_SEISMO/networks
+# inputTopoL=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
+# inputTopoB=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
+# pth2logos=$HOME/Map_project/logos
+# pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
 
 
 # //////////////////////////////////////////////////////////////////////////////
@@ -76,14 +78,14 @@ landcpt=land_man.cpt
 bathcpt=bath_man.cpt
 # maptitle=""
 
-# //////////////////////////////////////////////////////////////////////////////
-# Set default REGION for GREECE
-west=19
-east=30.6
-south=33
-north=42
-projscale=6000000
-frame=2
+# # //////////////////////////////////////////////////////////////////////////////
+# # Set default REGION for GREECE
+# west=19
+# east=30.6
+# south=33
+# north=42
+# projscale=6000000
+# frame=2
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set default magnitude interval
