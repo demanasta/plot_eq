@@ -6,6 +6,7 @@ function help {
 	echo " Program Name : plot_eq.sh"
 	echo " Version : v-0.1"
 	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
+	echo " Default param file: default-param"
 	echo " Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg "
 	echo " Switches: "
         echo "           -r [:= region] region to plot west east south north (default Greece)"
@@ -55,6 +56,7 @@ UPDCAT=0
 HISTEQ=0
 
 ##LOAD DEFAULT PARAMETERS
+echo "... load deafault parameters file ..."
 source default-param
 # # //////////////////////////////////////////////////////////////////////////////
 # # Set PATHS parameters
