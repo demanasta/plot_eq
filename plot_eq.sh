@@ -295,7 +295,7 @@ fi
 #////////////////////////////////////////////////////////////////
 #create temporary earthquake files
 #select with years
-awk 'NR != 2 {if ($1>='$starty' && $1<'$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
+awk 'NR != 2 {if ($1>='$starty' && $1<='$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
 #select with magnitude
 # awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
 cat tmp-eq1>tmp-eq2
