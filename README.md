@@ -56,11 +56,13 @@ For main scripts help function run:
  - topo [:= topography] use DEM topography
  - faults [:= faults] plot NOA fault database
  - histeq [:= historic eq ] plot historical eq via papazachos catalogue
+ 
 **EARTHQUAKE OPTIONS**
  - minmw [:= minimum magnitude]  bug use only int
  - maxmw [:= maximum magnitude]  bug use only int
  - starty [:= start year] 
  - stopy [:= stop year] 
+ 
 **OTHER OPRTIONS**
  - o [:= output] name of output files
  - l [:=labels] plot labels
