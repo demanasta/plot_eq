@@ -3,7 +3,7 @@
 # //////////////////////////////////////////////////////////////////////////////
 # Set PATHS parameters
 pth2dems=${HOME}/Map_project/dems
-inputTopoL=${pth2dems}/ionio.grd #ETOPO1_Bed_g_gmt4.grd
+inputTopoL=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
 inputTopoB=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
 pth2logos=$HOME/Map_project/logos
 pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
