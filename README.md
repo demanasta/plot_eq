@@ -68,6 +68,7 @@ For main scripts help function run:
  - o [:= output] name of output files
  - l [:=labels] plot labels
  - leg [:=legend] insert legends
+ - logo [:=logo] plot logo
  - jpg : convert eps file to jpg
  - h [:= help] help menu
  
