@@ -47,9 +47,10 @@ For main scripts help function run:
 >$ ./plot_eq.sh -h OR > $ ./plot_eq_proj.sh -h
 ``` 
 **plot_eq.sh**
+
 **MAIN OPTIONS**
+
  Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg 
- 
 
  - r [:= region] region to plot west east south north (default Greece) use: -r west east south north projscale frame
  - mt [:= map title] title map default none use quotes
