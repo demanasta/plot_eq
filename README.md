@@ -1,19 +1,91 @@
-plot NOA earthquake catalogue
-=============================
-> Plot National Observatory of Athens (NOA) earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot profile of earthquakes...
+Introduction
+=======
 
-## Contact
-*   Demitris Anastasiou [mail](mailto:danast@mail.ntua.gr)
+Plot National Observatory of Athens (NOA) earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot profile of earthquakes...
 
---------------------------------------------------------------------------------
+----------
+**main scripts**
 
-## Documentation
+ 1. plot_eq.sh : plot earthquakes
+ 2. plot_eq_proj.sh : plot earthquakes and profiles
 
-1. plot_eq.sh : plot eartquakes
-2. plot_eq_proj.sh :plot earthquakes and projection
-3. get_catalogue.sh : download NOA eq_fault cataloges
-4. default-param : defautlt parameters for gmt... paths and region parameters.
+**helpful files**
+
+ 3. default-param : default parameters for paths, input files and region configuration
+ 4. get_catalogue.sh : this script download [earthquake NOA catalogue](http://www.gein.noa.gr/services/full_catalogue.php)  and [fault database](http://www.gein.noa.gr/services/GPSData/1_NOAFaults/)
+
+Documentation
+============
+----------
+
+ - Be sure that gmt is installed on your computer
+ - Configure file *default-param*.
+
+If you like to use topography you can download world DEM from [here](https://www.ngdc.noaa.gov/mgg/global/global.html)
+ 
+```
+# //////////////////
+# Set PATHS parameters
+pth2dems=${HOME}/Map_project/dems
+inputTopoL=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
+inputTopoB=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
+pth2logos=$HOME/Map_project/logos
+pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
+
+#///////////////////
+# Set default REGION for GREECE
+west=19
+east=30.6
+south=33
+north=42
+projscale=6000000
+frame=2
+```
+For main scripts help function run:
+```
+>$ ./plot_eq.sh -h OR > $ ./plot_eq_proj.sh -h
+``` 
+**plot_eq.sh**
+**MAIN OPTIONS**
+ Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg 
+-r [:= region] region to plot west east south north (default Greece)
+use: -r west east south north projscale frame
+
+-mt [:= map title] title map default none use quotes
+-updcat [:= update earthquake catalogue] 
+-topo [:= topography] use DEM topography
+-faults [:= faults] plot NOA fault database
+-histeq [:= historic eq ] plot historical eq via papazachos catalogue
+**EARTHQUAKE OPTIONS**
+           -minmw [:= minimum magnitude]  bug use only int
+           -maxmw [:= maximum magnitude]  bug use only int
+           -starty [:= start year] 
+           -stopy [:= stop year] 
+**OTHER OPRTIONS**
+           -o [:= output] name of output files
+           -l [:=labels] plot labels
+           -leg [:=legend] insert legends
+           -jpg : convert eps file to jpg
+           -h [:= help] help menu
+ Exit Status:    1 -> help message or error
+ Exit Status: >= 0 -> sucesseful exit
+
+example:
+```
+$ ./plot_eq.sh -topo -faults -jpg -leg
+```
 
 
-use -h (help) to present all available switches of these scripts.
+----------
+----------
+**plot_eq_proj.sh**
+In these script added an optio to plot rofile of earthquakes
+  -eqproj [:=projection] plot projectio along profile
+  ```    use -eqproj lon lat Az Lmin Lmax Wmin Wmax depth```
+lon: start longitude of profile
+lat: start latitude of profile
+Az: Azimuth of profile
+Lmin, Lmax: Profile Length start-stop
+Wmin, Wmax: Profile width on the two sides of profile
+depth: depth of profile
 
