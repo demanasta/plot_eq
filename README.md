@@ -48,26 +48,28 @@ For main scripts help function run:
 **plot_eq.sh**
 **MAIN OPTIONS**
  Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg 
--r [:= region] region to plot west east south north (default Greece)
-use: -r west east south north projscale frame
+ 
 
--mt [:= map title] title map default none use quotes
--updcat [:= update earthquake catalogue] 
--topo [:= topography] use DEM topography
--faults [:= faults] plot NOA fault database
--histeq [:= historic eq ] plot historical eq via papazachos catalogue
+ - r [:= region] region to plot west east south north (default Greece) use: -r west east south north projscale frame
+ - mt [:= map title] title map default none use quotes
+ - updcat [:= update earthquake catalogue] 
+ - topo [:= topography] use DEM topography
+ - faults [:= faults] plot NOA fault database
+ - histeq [:= historic eq ] plot historical eq via papazachos catalogue
 **EARTHQUAKE OPTIONS**
-           -minmw [:= minimum magnitude]  bug use only int
-           -maxmw [:= maximum magnitude]  bug use only int
-           -starty [:= start year] 
-           -stopy [:= stop year] 
+ - minmw [:= minimum magnitude]  bug use only int
+ - maxmw [:= maximum magnitude]  bug use only int
+ - starty [:= start year] 
+ - stopy [:= stop year] 
 **OTHER OPRTIONS**
-           -o [:= output] name of output files
-           -l [:=labels] plot labels
-           -leg [:=legend] insert legends
-           -jpg : convert eps file to jpg
-           -h [:= help] help menu
+ - o [:= output] name of output files
+ - l [:=labels] plot labels
+ - leg [:=legend] insert legends
+ - jpg : convert eps file to jpg
+ - h [:= help] help menu
+ 
  Exit Status:    1 -> help message or error
+ 
  Exit Status: >= 0 -> sucesseful exit
 
 example:
@@ -80,12 +82,18 @@ $ ./plot_eq.sh -topo -faults -jpg -leg
 ----------
 **plot_eq_proj.sh**
 In these script added an optio to plot rofile of earthquakes
+
   -eqproj [:=projection] plot projectio along profile
   ```    use -eqproj lon lat Az Lmin Lmax Wmin Wmax depth```
+  
 lon: start longitude of profile
+
 lat: start latitude of profile
+
 Az: Azimuth of profile
+
 Lmin, Lmax: Profile Length start-stop
+
 Wmin, Wmax: Profile width on the two sides of profile
 depth: depth of profile
 
