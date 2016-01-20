@@ -16,14 +16,13 @@ function help {
         echo "           -topo [:= update catalogue] title map default none use quotes"
         echo "           -faults [:= faults] plot NOA fault database"
         echo "           -histeq [:= historic eq ] plot historical eq via papazachos catalogue"
-
+	echo ""
         echo "/*** EARTHQUAKE OPTIONS **********************************************************/"
         echo "           -minmw [:= minimum magnitude]  bug use only int"
         echo "           -maxmw [:= maximum magnitude]  bug use only int"
 	echo "           -starty [:= start year] "
 	echo "           -stopy [:= stop year] "
-
-
+	echo ""
         echo "/*** OTHER OPRTIONS ************************************************************/"
 	echo "           -o [:= output] name of output files"
 	echo "           -l [:=labels] plot labels"
