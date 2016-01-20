@@ -6,6 +6,7 @@ function help {
 	echo " Program Name : plot_eq.sh"
 	echo " Version : v-0.1"
 	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
+	echo " Default param file: default-param"
 	echo " Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg "
 	echo " Switches: "
         echo "           -r [:= region] region to plot west east south north (default Greece)"
@@ -55,6 +56,7 @@ UPDCAT=0
 HISTEQ=0
 
 ##LOAD DEFAULT PARAMETERS
+echo "... load deafault parameters file ..."
 source default-param
 # # //////////////////////////////////////////////////////////////////////////////
 # # Set PATHS parameters
@@ -293,7 +295,7 @@ fi
 #////////////////////////////////////////////////////////////////
 #create temporary earthquake files
 #select with years
-awk 'NR != 2 {if ($1>='$starty' && $1<'$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
+awk 'NR != 2 {if ($1>='$starty' && $1<='$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
 #select with magnitude
 # awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
 cat tmp-eq1>tmp-eq2
