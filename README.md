@@ -106,3 +106,11 @@ References
 Ganas Athanassios, Oikonomou Athanassia I., and Tsimi Christina, 2013. NOAFAULTS: a digital database for active faults in Greece. Bulletin of the Geological Society of Greece, vol. XLVII and Proceedings of the 13th International Congress, Chania, Sept. 2013.
 
 Wessel, P., W. H. F. Smith, R. Scharroo, J. F. Luis, and F. Wobbe, Generic Mapping Tools: Improved version released, EOS Trans. AGU, 94, 409-410, 2013.
+
+Contact
+=========
+Demitris Anastasiou, danast@mail.ntua.gr
+
+Xanthos Papanikolaou, xanthos@mail.ntua.gr
+
+
