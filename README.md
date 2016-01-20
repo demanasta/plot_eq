@@ -1,7 +1,8 @@
 Introduction
 =======
 
-Plot National Observatory of Athens (NOA) earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot profile of earthquakes...
+This repository includes bash scripts that use [Generic Tool Maps (Wessel et al., 2013)](http://gmt.soest.hawaii.edu/projects/gmt) to plot National Observatory of Athens (NOA) earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot profile of earthquakes...
+
 
 ----------
 **main scripts**
@@ -12,7 +13,7 @@ Plot National Observatory of Athens (NOA) earthquake catalogue and historical ea
 **helpful files**
 
  3. default-param : default parameters for paths, input files and region configuration
- 4. get_catalogue.sh : this script download [earthquake NOA catalogue](http://www.gein.noa.gr/services/full_catalogue.php)  and [fault database](http://www.gein.noa.gr/services/GPSData/1_NOAFaults/)
+ 4. get_catalogue.sh : this script download [earthquake NOA catalogue](http://www.gein.noa.gr/services/full_catalogue.php)  and [fault database (Ganas et al., 2013)](http://www.gein.noa.gr/services/GPSData/1_NOAFaults/)
 
 Documentation
 ============
@@ -99,3 +100,8 @@ Lmin, Lmax: Profile Length start-stop
 Wmin, Wmax: Profile width on the two sides of profile
 depth: depth of profile
 
+References
+=========
+Ganas Athanassios, Oikonomou Athanassia I., and Tsimi Christina, 2013. NOAFAULTS: a digital database for active faults in Greece. Bulletin of the Geological Society of Greece, vol. XLVII and Proceedings of the 13th International Congress, Chania, Sept. 2013.
+
+Wessel, P., W. H. F. Smith, R. Scharroo, J. F. Luis, and F. Wobbe, Generic Mapping Tools: Improved version released, EOS Trans. AGU, 94, 409-410, 2013.
