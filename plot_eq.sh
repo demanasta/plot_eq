@@ -28,6 +28,7 @@ function help {
 	echo "           -o [:= output] name of output files"
 	echo "           -l [:=labels] plot labels"
         echo "           -leg [:=legend] insert legends"
+        echo "           -logo [:=logo] plot logo"
 	echo "           -jpg : convert eps file to jpg"
 	echo "           -h [:= help] help menu"
 	echo " Exit Status:    1 -> help message or error"
@@ -50,6 +51,7 @@ gmt gmtset FONT_ANNOT_PRIMARY 10 FONT_LABEL 10 MAP_FRAME_WIDTH 0.12c FONT_TITLE 
 TOPOGRAPHY=0
 FAULTS=0
 LABELS=0
+LOGO=0
 OUTJPG=0
 LEGEND=0
 UPDCAT=0
@@ -176,6 +178,10 @@ do
 			LEGEND=1
 			shift
 			;;
+		-logo)
+			LOGO=1
+			shift
+			;;
 		-jpg)
 			OUTJPG=1
 			shift
@@ -185,6 +191,15 @@ do
 			;;
 	esac
 done
+
+#////////////START
+	echo "/******************************************************************************/"
+	echo " Program Name : plot_eq.sh"
+	echo " Version : v-0.1"
+	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
+	echo " Default param file: default-param"
+	echo "/******************************************************************************/"
+
 
 # //////////////////////////////////////////////////////////////////////////////
 # check if files exist
@@ -223,6 +238,14 @@ then
 		FAULTS=0
 	fi
 fi
+
+###check LOGO file
+if [ ! -f "$pth2logos" ]
+then
+	echo "Logo file does not exist"
+	LOGO=0
+fi
+
 
 # //////////////////////////////////////////////////////////////////////////////
 # SET REGION PROPERTIES
@@ -394,7 +417,13 @@ gmt	pslegend .legend ${legendc} -C0.1c/0.1c -L1.3 -O -K >> $outfile
 fi
 
 #/////////////////PLOT LOGO DSO
-psimage $pth2logos -O $logo_pos2 -W1.1c -F0.4 >>$outfile
+if [ "$LOGO" -eq 1 ]
+then
+gmt	psimage $pth2logos -O $logo_pos2 -W1.1c -F0.4  -K >>$outfile
+fi
+
+#//////// close eps file
+echo "9999 9999" | gmt psxy -J -R  -O >> $outfile
 
 #################--- Convert to jpg format ----##########################################
 if [ "$OUTJPG" -eq 1 ]
