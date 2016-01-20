@@ -43,9 +43,9 @@ function help {
 
 # //////////////////////////////////////////////////////////////////////////////
 # GMT parameters
-gmtset MAP_FRAME_TYPE fancy
-gmtset PS_PAGE_ORIENTATION portrait
-gmtset FONT_ANNOT_PRIMARY 10 FONT_LABEL 10 MAP_FRAME_WIDTH 0.12c FONT_TITLE 18p
+gmt gmtset MAP_FRAME_TYPE fancy
+gmt gmtset PS_PAGE_ORIENTATION portrait
+gmt gmtset FONT_ANNOT_PRIMARY 10 FONT_LABEL 10 MAP_FRAME_WIDTH 0.12c FONT_TITLE 18p
 
 # //////////////////////////////////////////////////////////////////////////////
 # Pre-defined parameters for bash script
@@ -262,7 +262,7 @@ fi
 # //////////////////////////////////////////////////////////////////////////////
 # SET REGION PROPERTIES
 	#these are default for GREECE REGION
-	gmtset PS_MEDIA 26cx28c
+gmt	gmtset PS_MEDIA 26cx28c
 	scale="-Lf20/33.5/36:24/100+l+jr"
 	range="-R$west/$east/$south/$north"
 	proj="-Jm24/37/1:$projscale"
@@ -280,8 +280,8 @@ fi
 if [ "$TOPOGRAPHY" -eq 0 ]
 then
 	################## Plot coastlines only ######################	
-	psbasemap $range $proj $scale -B$frame:."$maptitle": -P -K -Y8.5c > $outfile
-	pscoast -R -J -O -K -W0.25 -G195 -Df -Na -U$logo_pos >> $outfile
+gmt	psbasemap $range $proj $scale -B$frame:."$maptitle": -P -K -Y8.5c > $outfile
+gmt	pscoast -R -J -O -K -W0.25 -G195 -Df -Na -U$logo_pos >> $outfile
 # 	pscoast -Jm -R -Df -W0.25p,black -G195  -U$logo_pos -K -O -V >> $outfile
 # 	psbasemap -R -J -O -K --FONT_ANNOT_PRIMARY=10p $scale --FONT_LABEL=10p >> $outfile
 fi
@@ -289,16 +289,16 @@ if [ "$TOPOGRAPHY" -eq 1 ]
 then
 	# ####################### TOPOGRAPHY ###########################
 	# bathymetry
-	makecpt -Cgebco.cpt -T-7000/0/150 -Z > $bathcpt
-	grdimage $inputTopoB $range $proj -C$bathcpt -K  -Y8.5c> $outfile
-	pscoast $proj -P $range -Df -Gc -K -O >> $outfile
+gmt	makecpt -Cgebco.cpt -T-7000/0/150 -Z > $bathcpt
+gmt	grdimage $inputTopoB $range $proj -C$bathcpt -K  -Y8.5c> $outfile
+gmt	pscoast $proj -P $range -Df -Gc -K -O >> $outfile
 	# land
-	makecpt -Cgray.cpt -T-3000/1800/50 -Z > $landcpt
-	grdimage $inputTopoL $range $proj -C$landcpt  -K -O >> $outfile
-	pscoast -R -J -O -K -Q >> $outfile
+gmt	makecpt -Cgray.cpt -T-3000/1800/50 -Z > $landcpt
+gmt	grdimage $inputTopoL $range $proj -C$landcpt  -K -O >> $outfile
+gmt	pscoast -R -J -O -K -Q >> $outfile
 	#------- coastline -------------------------------------------
-	psbasemap -R -J -O -K -B$frame:."$maptitle": --FONT_ANNOT_PRIMARY=10p $scale --FONT_LABEL=10p >> $outfile
-	pscoast -J -R -Df -W0.25p,black -K  -O -U$logo_pos >> $outfile
+gmt	psbasemap -R -J -O -K -B$frame:."$maptitle": --FONT_ANNOT_PRIMARY=10p $scale --FONT_LABEL=10p >> $outfile
+gmt	pscoast -J -R -Df -W0.25p,black -K  -O -U$logo_pos >> $outfile
 fi
 
 # psbasemap -R$west/$east/$south/$north $proj $tick -P -Y12 -K > $out
@@ -314,7 +314,7 @@ fi
 if [ "$FAULTS" -eq 1 ]
 then
 	echo "plot NOA FAULTS CATALOGUE Ganas et.al, 2013 ..."
-	psxy $pth2faults -R -J -O -K  -W.5,204/102/0  >> $outfile
+gmt	psxy $pth2faults -R -J -O -K  -W.5,204/102/0  >> $outfile
 fi
 
 #////////////////////////////////////////////////////////////////
@@ -323,7 +323,7 @@ if [ "$HISTEQ" -eq 1 ]
 then
 # 	awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
 	echo "plot HISTORIC Earthquakes, Papazachos ana Papazacho catalogue"
-	awk -F, '{print $5,$4,$7}' papazachos_db | psxy -R -J -O -K  -W.1 -Ss.11 -Gblack >> $outfile
+	awk -F, '{print $5,$4,$7}' papazachos_db | gmt psxy -R -J -O -K  -W.1 -Ss.11 -Gblack >> $outfile
 	
 fi
 
@@ -354,52 +354,52 @@ echo "N 1" >> .legend
 
 #////////////////////////////////////////////////////////////////
 #plot 
-makecpt -Cseis -T0/150/10 -Z > seis2.cpt
+gmt	makecpt -Cseis -T0/150/10 -Z > seis2.cpt
 if [ "$minmw" -lt 2 ] && [ "$maxmw" -gt 2 ]
 then
-	awk '{print $8,$7,$9}' tmp-eq02 | psxy -R -J -O -K  -W.1 -Sc.05 -Cseis2.cpt>> $outfile
+	awk '{print $8,$7,$9}' tmp-eq02 | gmt psxy -R -J -O -K  -W.1 -Sc.05 -Cseis2.cpt>> $outfile
 	cat tmp-eq02 >> tmp-proj
 	echo "G 0.25c" >> .legend
 	echo "S 0.4c c 0.05c 160 0.22p 0.9c Mw < 2" >> .legend
 fi
 if [ "$minmw" -lt 3 ] && [ "$maxmw" -gt 2 ]
 then
-	awk '{print $8,$7,$9}' tmp-eq23 | psxy -R -J -O -K  -W.1 -Sc.09 -Cseis2.cpt>> $outfile
+	awk '{print $8,$7,$9}' tmp-eq23 | gmt psxy -R -J -O -K  -W.1 -Sc.09 -Cseis2.cpt>> $outfile
 	cat tmp-eq23 >> tmp-proj
 	echo "G 0.25c" >> .legend
 	echo "S 0.4c c 0.09c 160 0.22p 0.9c 2 =< Mw < 3" >> .legend
 fi
 if [ "$minmw" -lt 4 ] && [ "$maxmw" -gt 3 ]
 then
-	awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
+	awk '{print $8,$7,$9}' tmp-eq34 | gmt psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
 	cat tmp-eq34 >> tmp-proj
 	echo "G 0.25c" >> .legend
 	echo "S 0.4c c 0.11c 160 0.22p 0.9c 3 =< Mw < 4" >> .legend
 fi
 if [ "$minmw" -lt 5 ] && [ "$maxmw" -gt 4 ]
 then
-	awk '{print $8,$7,$9}' tmp-eq45 | psxy -R -J -O -K  -W.1 -Sc.15 -Cseis2.cpt>> $outfile
+	awk '{print $8,$7,$9}' tmp-eq45 | gmt psxy -R -J -O -K  -W.1 -Sc.15 -Cseis2.cpt>> $outfile
 	cat tmp-eq45 >> tmp-proj
 	echo "G 0.25c" >> .legend
 	echo "S 0.4c c 0.15c 160 0.22p 0.9c 4 =< Mw < 5" >> .legend
 fi
 if [ "$minmw" -lt 6 ] && [ "$maxmw" -gt 5 ]
 then
-	awk '{print $8,$7,$9}' tmp-eq56 | psxy -R -J -O -K  -W.1 -Sc.25 -Cseis2.cpt>> $outfile
+	awk '{print $8,$7,$9}' tmp-eq56 | gmt psxy -R -J -O -K  -W.1 -Sc.25 -Cseis2.cpt>> $outfile
 	cat tmp-eq56 >> tmp-proj
 	echo "G 0.25c" >> .legend
 	echo "S 0.4c c 0.25c 160 0.22p 0.9c 5 =< Mw < 6" >> .legend
 fi
 if [ "$minmw" -lt 10 ] && [ "$maxmw" -gt 6 ]
 then
-	awk '{print $8,$7,$9}' tmp-eq68 | psxy -R -J -O -K  -W.1 -Sa.8 -Cseis2.cpt >> $outfile
+	awk '{print $8,$7,$9}' tmp-eq68 | gmt psxy -R -J -O -K  -W.1 -Sa.8 -Cseis2.cpt >> $outfile
 	cat tmp-eq68 >> tmp-proj
 	echo "G 0.25c" >> .legend
 	echo "S 0.4c a 0.8c 160 0.22p 0.9c 6 =< Mw" >> .legend
 fi
 # awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out 
 
-psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
+gmt	psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 
 # psxy center.dat -R -J -O -K -W1 -Sc.3 -G255/0/0 >> $out
 # psxy center.dat -R -J -O -K -W5/255/0/0 >> $out
@@ -432,9 +432,9 @@ echo "T NOA FAULTS CATALOGUE after Ganas et.al, 2013" >> .legend
 if [ "$EQPROJ" -eq 1 ]
 then
 	# awk '{print($8,$7,$9)}' tmp-eq45 | project -C21/36 -A90 -W-1/1 -L0/4 > projection.dat
-	awk '{print($8,$7,$9)}' tmp-proj | project -C${prclon}/${prclat} -A${praz} -Fxyzpqrs -W${prwmin}/${prwmax} -L${prlmin}/${prlmax}  -V -Q> projection.dat
-	awk '{print $1, $2}' projection.dat |  psxy -R -J -O -K -Sc0.1 -G0/0/0 >>$outfile
-	awk '{print $6,$7}' projection.dat | psxy -R -J -O -K -Sc0.1 -G0/0/255 >>$outfile
+	awk '{print($8,$7,$9)}' tmp-proj | gmt project -C${prclon}/${prclat} -A${praz} -Fxyzpqrs -W${prwmin}/${prwmax} -L${prlmin}/${prlmax}  -V -Q> projection.dat
+	awk '{print $1, $2}' projection.dat | gmt psxy -R -J -O -K -Sc0.1 -G0/0/0 >>$outfile
+	awk '{print $6,$7}' projection.dat | gmt psxy -R -J -O -K -Sc0.1 -G0/0/255 >>$outfile
 
 	west=${prlmin}
 	east=${prlmax}
@@ -447,7 +447,7 @@ then
 	# tick="-Ba5f5g0/a5f5g0"
 
 
-	awk '{print $4,$3}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.1 -G200 -O  -Y-6.5c -P -K >> $outfile
+	awk '{print $4,$3}' projection.dat | gmt psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.1 -G200 -O  -Y-6.5c -P -K >> $outfile
 fi
 
 
@@ -461,11 +461,11 @@ echo "T Earthquake data automated recovered via NOA catalogue" >> .legend
 # ///////////////// PLOT LEGEND //////////////////////////////////
 if [ "$LEGEND" -eq 1 ]
 then
-        pslegend .legend ${legendc} -C0.1c/0.1c -L1.3 -O -K >> $outfile
+gmt        pslegend .legend ${legendc} -C0.1c/0.1c -L1.3 -O -K >> $outfile
 fi
 
 #/////////////////PLOT LOGO DSO
-psimage $pth2logos/DSOlogo2.eps -O $logo_pos2 -W1.1c -F0.4 >>$outfile
+gmt psimage $pth2logos/DSOlogo2.eps -O $logo_pos2 -W1.1c -F0.4 >>$outfile
 
 #################--- Convert to jpg format ----##########################################
 if [ "$OUTJPG" -eq 1 ]
