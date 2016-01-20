@@ -3,9 +3,10 @@
 # HELP FUNCTION
 function help {
 	echo "/******************************************************************************/"
-	echo " Program Name : plot_eq.sh"
+	echo " Program Name : plot_eq_proj.sh"
 	echo " Version : v-0.1"
 	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
+	echo " Default param file: default-param"
 	echo " Usage   : plot_eq.sh -r west east south north |  | -o [output] | -jpg "
 	echo " Switches: "
         echo "           -r [:= region] region to plot west east south north (default Greece)"
@@ -35,7 +36,7 @@ function help {
 	echo " Exit Status:    1 -> help message or error"
 	echo " Exit Status: >= 0 -> sucesseful exit"
 	echo ""
-	echo "run: ./plot_eq_proj.sh -topo -faults -jpg -leg"
+	echo "run: ./plot_eq_proj.sh -topo -faults -jpg -leg -eqproj [parameters]"
 	echo "/******************************************************************************/"
 	exit 1
 }
@@ -59,6 +60,7 @@ HISTEQ=0
 EQPROJ=0
 
 #LOAD DEFAULT PARAMETERS
+echo "... load deafaulta parameters file ..."
 source default-param
 # # //////////////////////////////////////////////////////////////////////////////
 # # Set PATHS parameters
