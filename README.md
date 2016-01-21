@@ -7,8 +7,8 @@ This repository includes bash scripts that use [Generic Tool Maps (Wessel et al.
 ----------
 **main scripts**
 
- 1. plot_eq.sh : plot earthquakes
- 2. plot_eq_proj.sh : plot earthquakes and profiles
+ 1. plot_eq.sh : plots earthquakes
+ 2. plot_eq_proj.sh : plots earthquakes and profiles
 
 **helpful files**
 
