@@ -104,6 +104,10 @@ Lmin, Lmax: Profile Length start-stop
 Wmin, Wmax: Profile width on the two sides of profile
 depth: depth of profile
 
+# Updates
+========
+- 21-1-2015: online version is available
+
 # References
 =========
 Ganas Athanassios, Oikonomou Athanassia I., and Tsimi Christina, 2013. NOAFAULTS: a digital database for active faults in Greece. Bulletin of the Geological Society of Greece, vol. XLVII and Proceedings of the 13th International Congress, Chania, Sept. 2013.
