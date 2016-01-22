@@ -81,9 +81,10 @@ For main scripts help function run:
 
 ## Example:
 ```
-$> ./plot_eq.sh -topo -faults -jpg -leg
+$ ./plot_eq.sh -topo -faults -jpg -leg
 ```
 
+![output plot of Example](Example1.jpg)
 
 ----------
 ----------
