@@ -84,7 +84,7 @@ For main scripts help function run:
 $ ./plot_eq.sh -topo -faults -jpg -leg
 ```
 
-![output plot of Example](Example1.jpg)
+![output plot of Example](https://raw.githubusercontent.com/demanasta/plot_eq/master/Example1.jpg)
 
 ----------
 ----------
