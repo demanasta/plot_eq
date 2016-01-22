@@ -31,29 +31,33 @@
       </header>
       <section>
         <h1>
-<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h1>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction</h1>
 
-<p>This repository includes bash scripts that use <a href="http://gmt.soest.hawaii.edu/projects/gmt">Generic Tool Maps (Wessel et al., 2013)</a> to plot National Observatory of Athens (NOA) earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot profile of earthquakes...</p>
+<h1></h1>
+
+<p>This repository includes bash scripts that use <a href="http://gmt.soest.hawaii.edu/projects/gmt">Generic Tool Maps (Wessel et al., 2013)</a> to plot National Observatory of Athens <a href="http://www.noa.gr/index.php?lang=en">NOA</a> earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot earthquake profiles ...</p>
 
 <hr>
 
 <p><strong>main scripts</strong></p>
 
 <ol>
-<li>plot_eq.sh : plot earthquakes</li>
-<li>plot_eq_proj.sh : plot earthquakes and profiles</li>
+<li>plot_eq.sh : plots earthquakes</li>
+<li>plot_eq_proj.sh : plots earthquakes and profiles</li>
 </ol>
 
 <p><strong>helpful files</strong></p>
 
 <ol>
 <li>default-param : default parameters for paths, input files and region configuration</li>
-<li>get_catalogue.sh : this script download <a href="http://www.gein.noa.gr/services/full_catalogue.php">earthquake NOA catalogue</a>  and <a href="http://www.gein.noa.gr/services/GPSData/1_NOAFaults/">fault database (Ganas et al., 2013)</a>
+<li>get_catalogue.sh : this script will download the <a href="http://www.gein.noa.gr/services/full_catalogue.php">NOA earthquake catalogue</a>  and <a href="http://www.gein.noa.gr/services/GPSData/1_NOAFaults/">fault database (Ganas et al., 2013)</a>
 </li>
 </ol>
 
 <h1>
-<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documentation</h1>
+
+<h1></h1>
 
 <hr>
 
@@ -62,7 +66,7 @@
 <li>Configure file <em>default-param</em>.</li>
 </ul>
 
-<p>If you like to use topography you can download world DEM from <a href="https://www.ngdc.noaa.gov/mgg/global/global.html">here</a></p>
+<p>If you'd like to use topography, you can download world DEM from <a href="https://www.ngdc.noaa.gov/mgg/global/global.html">here</a></p>
 
 <pre><code># //////////////////
 # Set PATHS parameters
@@ -84,20 +88,22 @@ frame=2
 
 <p>For main scripts help function run:</p>
 
-<pre><code>&gt;$ ./plot_eq.sh -h OR &gt; $ ./plot_eq_proj.sh -h
+<pre><code>  $&gt; ./plot_eq.sh -h 
+  ## (or)
+  $&gt; ./plot_eq_proj.sh -h
 </code></pre>
 
 <p><strong>plot_eq.sh</strong></p>
 
 <p><strong>MAIN OPTIONS</strong></p>
 
-<p>Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg </p>
+<p>Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg</p>
 
 <ul>
-<li>r [:= region] region to plot west east south north (default Greece) use: -r west east south north projscale frame</li>
-<li>mt [:= map title] title map default none use quotes</li>
+<li>r      [:= region] region to plot west east south north (default Greece) use: -r west east south north projscale frame</li>
+<li>mt     [:= map title] title map default none use quotes</li>
 <li>updcat [:= update earthquake catalogue] </li>
-<li>topo [:= topography] use DEM topography</li>
+<li>topo   [:= topography] use DEM topography</li>
 <li>faults [:= faults] plot NOA fault database</li>
 <li>histeq [:= historic eq ] plot historical eq via papazachos catalogue</li>
 </ul>
@@ -105,33 +111,35 @@ frame=2
 <p><strong>EARTHQUAKE OPTIONS</strong></p>
 
 <ul>
-<li>minmw [:= minimum magnitude]  bug use only int</li>
-<li>maxmw [:= maximum magnitude]  bug use only int</li>
+<li>minmw  [:= minimum magnitude]  bug use only int</li>
+<li>maxmw  [:= maximum magnitude]  bug use only int</li>
 <li>starty [:= start year] </li>
-<li>stopy [:= stop year] </li>
+<li>stopy  [:= stop year] </li>
 </ul>
 
 <p><strong>OTHER OPRTIONS</strong></p>
 
 <ul>
-<li>o [:= output] name of output files</li>
-<li>l [:=labels] plot labels</li>
-<li>leg [:=legend] insert legends</li>
+<li>o    [:= output] name of output files</li>
+<li>l    [:=labels] plot labels</li>
+<li>leg  [:=legend] insert legends</li>
 <li>logo [:=logo] plot logo</li>
 <li>jpg : convert eps file to jpg</li>
 <li>
-<p>h [:= help] help menu</p>
+<p>h    [:= help] help menu</p>
 
-<p>Exit Status:    1 -&gt; help message or error</p>
-
-<p>Exit Status: &gt;= 0 -&gt; sucesseful exit</p>
+<p>Exit Status:    1 -&gt; help message or error
+Exit Status: &gt;= 0 -&gt; sucesseful exit</p>
 </li>
 </ul>
 
-<p>example:</p>
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example:</h2>
 
 <pre><code>$ ./plot_eq.sh -topo -faults -jpg -leg
 </code></pre>
+
+<p><img src="Example1.jpg" alt="output plot of Example"></p>
 
 <hr>
 
@@ -155,14 +163,27 @@ In these script added an optio to plot rofile of earthquakes</p>
 depth: depth of profile</p>
 
 <h1>
-<a id="references" class="anchor" href="#references" aria-hidden="true"><span class="octicon octicon-link"></span></a>References</h1>
+<a id="updates" class="anchor" href="#updates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Updates</h1>
+
+<h1></h1>
+
+<ul>
+<li>21-1-2015: online version is available</li>
+</ul>
+
+<h1>
+<a id="references" class="anchor" href="#references" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>References</h1>
+
+<h1></h1>
 
 <p>Ganas Athanassios, Oikonomou Athanassia I., and Tsimi Christina, 2013. NOAFAULTS: a digital database for active faults in Greece. Bulletin of the Geological Society of Greece, vol. XLVII and Proceedings of the 13th International Congress, Chania, Sept. 2013.</p>
 
 <p>Wessel, P., W. H. F. Smith, R. Scharroo, J. F. Luis, and F. Wobbe, Generic Mapping Tools: Improved version released, EOS Trans. AGU, 94, 409-410, 2013.</p>
 
 <h1>
-<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h1>
+<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contact</h1>
+
+<h1></h1>
 
 <p>Demitris Anastasiou, <a href="mailto:danast@mail.ntua.gr">danast@mail.ntua.gr</a></p>
 
