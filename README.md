@@ -1,5 +1,4 @@
 # Introduction
-=======
 
 This repository includes bash scripts that use [Generic Mapping Tools (Wessel et al., 2013)](http://gmt.soest.hawaii.edu/projects/gmt) to plot National Observatory of Athens [NOA](http://www.noa.gr/index.php?lang=en) earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot earthquake profiles ...
 
