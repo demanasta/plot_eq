@@ -249,13 +249,13 @@ fi
 # //////////////////////////////////////////////////////////////////////////////
 # SET REGION PROPERTIES
 	#these are default for GREECE REGION
-gmt	gmtset PS_MEDIA 26cx22c
-	scale="-Lf20/33.5/36:24/100+l+jr"
+# gmt	gmtset PS_MEDIA 26cx22c
+# 	scale="-Lf20/33.5/36:24/100+l+jr"
 	range="-R$west/$east/$south/$north"
 	proj="-Jm24/37/1:$projscale"
-	logo_pos="BL/6c/-1.5c/DSO[at]ntua"
-	logo_pos2="-C16c/15.6c"
-	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"	
+# 	logo_pos="BL/6c/-1.5c/DSO[at]ntua"
+# 	logo_pos2="-C16c/15.6c"
+# 	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"	
 	maptitle="Seismicity from $starty to $stopy"
 # //////////////////////////////////////////////////////////////////////////////
 # UPDATE NOA CATALOGUE
@@ -310,7 +310,7 @@ if [ "$HISTEQ" -eq 1 ]
 then
 # 	awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
 	echo "plot HISTORIC Earthquakes, Papazachos ana Papazacho catalogue"
-	awk -F, '{print $5,$4,$7}' papazachos_db |gmt psxy -R -J -O -K  -W.1 -Ss.11 -Gblack >> $outfile
+	awk -F, '{print $5,$4,$7}' papazachos_db |gmt psxy -R -J -O -K  -W.1 -Ss.19 -Gblack >> $outfile
 	
 fi
 
@@ -381,6 +381,8 @@ fi
 # awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out 
 
 gmt psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
+## SCALE FOR CENTRAL GREECE
+# gmt psscale -D21.7c/2.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 
 # psxy center.dat -R -J -O -K -W1 -Sc.3 -G255/0/0 >> $out
 # psxy center.dat -R -J -O -K -W5/255/0/0 >> $out
