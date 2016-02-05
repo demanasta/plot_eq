@@ -71,8 +71,8 @@ source default-param
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set default files
-outfile=plot_eq.eps
-out_jpg=plot_eq.jpg
+outfile=plot_hcmt.eps
+out_jpg=plot_hcmt.jpg
 landcpt=land_man.cpt
 bathcpt=bath_man.cpt
 # maptitle=""
@@ -310,74 +310,82 @@ if [ "$HISTEQ" -eq 1 ]
 then
 # 	awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
 	echo "plot HISTORIC Earthquakes, Papazachos ana Papazacho catalogue"
-	awk -F, '{print $5,$4,$7}' papazachos_db |gmt psxy -R -J -O -K  -W.1 -Ss.27 -Gblack >> $outfile
+	awk -F, '{print $5,$4,$7}' papazachos_db |gmt psxy -R -J -O -K  -W.1 -Ss.19 -Gblack >> $outfile
 	
 fi
 
 #////////////////////////////////////////////////////////////////
-#create temporary earthquake files
-#select with years
-awk 'NR != 2 {if ($1>='$starty' && $1<='$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
-#select with magnitude
-# awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
-cat tmp-eq1>tmp-eq2
-#split to magnitude categories
-awk 'NR != 0 {if ($10>=0 && $10<2) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq02
-awk 'NR != 0 {if ($10>=2 && $10<3) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq23
-awk 'NR != 0 {if ($10>=3 && $10<4) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq34
-awk 'NR != 0 {if ($10>=4 && $10<5) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq45
-awk 'NR != 0 {if ($10>=5 && $10<6) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq56
-awk 'NR != 0 {if ($10>=6 && $10<8) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq68
+#  PLOT HARVARD CMT catalogue
+# gmt	makecpt -Cseis -T0/150/10 -Z > seis2.cpt
+gmt	psmeca harvardcat.cmt -R -J -Sm0.4c/0 -Gred -W0.25p -T0 -O -K >> $outfile
 
-# start create legend file .legend
-echo "G 0.2c" > .legend
-# echo "H 10 Times-Roman FROM: $starty" >> .legend
-# echo "H 10 Times-Roman   TO: $stopy" >> .legend
-echo "G 0.2c" > .legend
+gmt	psmeca papazachos.cmt -R -Jm -Sa0.4 -h1 -CP0.25 -K -O -P >> $outfile
 
-echo "H 11 Times-Roman Magnitude" >> .legend
-echo "D 0.3c 1p" >> .legend
-echo "N 1" >> .legend
 
-#////////////////////////////////////////////////////////////////
-#plot 
-gmt	makecpt -Cseis -T0/150/10 -Z > seis2.cpt
-if [ "$minmw" -lt 2 ] && [ "$maxmw" -gt 2 ]
-then
-	awk '{print $8,$7,$9}' tmp-eq02 | gmt psxy -R -J -O -K  -W.1 -Sc.05 -Cseis2.cpt>> $outfile
-	echo "G 0.25c" >> .legend
-	echo "S 0.4c c 0.05c 160 0.22p 0.9c Mw < 2" >> .legend
-fi
-if [ "$minmw" -lt 3 ] && [ "$maxmw" -gt 2 ]
-then
-	awk '{print $8,$7,$9}' tmp-eq23 | gmt psxy -R -J -O -K  -W.1 -Sc.09 -Cseis2.cpt>> $outfile
-	echo "G 0.25c" >> .legend
-	echo "S 0.4c c 0.09c 160 0.22p 0.9c 2 =< Mw < 3" >> .legend
-fi
-if [ "$minmw" -lt 4 ] && [ "$maxmw" -gt 3 ]
-then
-	awk '{print $8,$7,$9}' tmp-eq34 | gmt psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
-	echo "G 0.25c" >> .legend
-	echo "S 0.4c c 0.11c 160 0.22p 0.9c 3 =< Mw < 4" >> .legend
-fi
-if [ "$minmw" -lt 5 ] && [ "$maxmw" -gt 4 ]
-then
-	awk '{print $8,$7,$9}' tmp-eq45 | gmt psxy -R -J -O -K  -W.1 -Sc.15 -Cseis2.cpt>> $outfile
-	echo "G 0.25c" >> .legend
-	echo "S 0.4c c 0.15c 160 0.22p 0.9c 4 =< Mw < 5" >> .legend
-fi
-if [ "$minmw" -lt 6 ] && [ "$maxmw" -gt 5 ]
-then
-	awk '{print $8,$7,$9}' tmp-eq56 | gmt psxy -R -J -O -K  -W.1 -Sc.25 -Cseis2.cpt>> $outfile
-	echo "G 0.25c" >> .legend
-	echo "S 0.4c c 0.25c 160 0.22p 0.9c 5 =< Mw < 6" >> .legend
-fi
-if [ "$minmw" -lt 10 ] && [ "$maxmw" -gt 6 ]
-then
-	awk '{print $8,$7,$9}' tmp-eq68 | gmt psxy -R -J -O -K  -W.1 -Sa.8 -Cseis2.cpt >> $outfile
-	echo "G 0.25c" >> .legend
-	echo "S 0.4c a 0.8c 160 0.22p 0.9c 6 =< Mw" >> .legend
-fi
+# #////////////////////////////////////////////////////////////////
+# #create temporary earthquake files
+# #select with years
+# awk 'NR != 2 {if ($1>='$starty' && $1<='$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
+# #select with magnitude
+# # awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
+# cat tmp-eq1>tmp-eq2
+# #split to magnitude categories
+# awk 'NR != 0 {if ($10>=0 && $10<2) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq02
+# awk 'NR != 0 {if ($10>=2 && $10<3) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq23
+# awk 'NR != 0 {if ($10>=3 && $10<4) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq34
+# awk 'NR != 0 {if ($10>=4 && $10<5) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq45
+# awk 'NR != 0 {if ($10>=5 && $10<6) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq56
+# awk 'NR != 0 {if ($10>=6 && $10<8) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq68
+# 
+# # start create legend file .legend
+# echo "G 0.2c" > .legend
+# # echo "H 10 Times-Roman FROM: $starty" >> .legend
+# # echo "H 10 Times-Roman   TO: $stopy" >> .legend
+# echo "G 0.2c" > .legend
+# 
+# echo "H 11 Times-Roman Magnitude" >> .legend
+# echo "D 0.3c 1p" >> .legend
+# echo "N 1" >> .legend
+# 
+# #////////////////////////////////////////////////////////////////
+# #plot 
+# gmt	makecpt -Cseis -T0/150/10 -Z > seis2.cpt
+# if [ "$minmw" -lt 2 ] && [ "$maxmw" -gt 2 ]
+# then
+# 	awk '{print $8,$7,$9}' tmp-eq02 | gmt psxy -R -J -O -K  -W.1 -Sc.05 -Cseis2.cpt>> $outfile
+# 	echo "G 0.25c" >> .legend
+# 	echo "S 0.4c c 0.05c 160 0.22p 0.9c Mw < 2" >> .legend
+# fi
+# if [ "$minmw" -lt 3 ] && [ "$maxmw" -gt 2 ]
+# then
+# 	awk '{print $8,$7,$9}' tmp-eq23 | gmt psxy -R -J -O -K  -W.1 -Sc.09 -Cseis2.cpt>> $outfile
+# 	echo "G 0.25c" >> .legend
+# 	echo "S 0.4c c 0.09c 160 0.22p 0.9c 2 =< Mw < 3" >> .legend
+# fi
+# if [ "$minmw" -lt 4 ] && [ "$maxmw" -gt 3 ]
+# then
+# 	awk '{print $8,$7,$9}' tmp-eq34 | gmt psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
+# 	echo "G 0.25c" >> .legend
+# 	echo "S 0.4c c 0.11c 160 0.22p 0.9c 3 =< Mw < 4" >> .legend
+# fi
+# if [ "$minmw" -lt 5 ] && [ "$maxmw" -gt 4 ]
+# then
+# 	awk '{print $8,$7,$9}' tmp-eq45 | gmt psxy -R -J -O -K  -W.1 -Sc.15 -Cseis2.cpt>> $outfile
+# 	echo "G 0.25c" >> .legend
+# 	echo "S 0.4c c 0.15c 160 0.22p 0.9c 4 =< Mw < 5" >> .legend
+# fi
+# if [ "$minmw" -lt 6 ] && [ "$maxmw" -gt 5 ]
+# then
+# 	awk '{print $8,$7,$9}' tmp-eq56 | gmt psxy -R -J -O -K  -W.1 -Sc.25 -Cseis2.cpt>> $outfile
+# 	echo "G 0.25c" >> .legend
+# 	echo "S 0.4c c 0.25c 160 0.22p 0.9c 5 =< Mw < 6" >> .legend
+# fi
+# if [ "$minmw" -lt 10 ] && [ "$maxmw" -gt 6 ]
+# then
+# 	awk '{print $8,$7,$9}' tmp-eq68 | gmt psxy -R -J -O -K  -W.1 -Sa.8 -Cseis2.cpt >> $outfile
+# 	echo "G 0.25c" >> .legend
+# 	echo "S 0.4c a 0.8c 160 0.22p 0.9c 6 =< Mw" >> .legend
+# fi
 # awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out 
 
 gmt psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
