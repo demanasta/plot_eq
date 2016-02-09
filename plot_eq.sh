@@ -11,11 +11,13 @@ function help {
 	echo " Switches: "
         echo "           -r [:= region] region to plot west east south north (default Greece)"
         echo "                   use: -r west east south north projscale frame"
+        echo "           -param (paramfile) change default parmeters file"
         echo "           -mt [:= map title] title map default none use quotes"
-        echo "           -updcat [:= update catalogue] title map default none use quotes"
+        echo "           -updcat [:= update catalogue] update NOA catalogue"
         echo "           -topo [:= update catalogue] title map default none use quotes"
         echo "           -faults [:= faults] plot NOA fault database"
         echo "           -histeq [:= historic eq ] plot historical eq via papazachos catalogue"
+        echo "           -cat (file) [:=catalog] use altern catalog, default NOA"
 	echo ""
         echo "/*** EARTHQUAKE OPTIONS **********************************************************/"
         echo "           -minmw [:= minimum magnitude]  bug use only int"
@@ -56,9 +58,7 @@ LEGEND=0
 UPDCAT=0
 HISTEQ=0
 
-##LOAD DEFAULT PARAMETERS
-echo "... load deafault parameters file ..."
-source default-param
+
 # # //////////////////////////////////////////////////////////////////////////////
 # # Set PATHS parameters
 # pth2dems=${HOME}/Map_project/dems
@@ -76,6 +76,9 @@ out_jpg=plot_eq.jpg
 landcpt=land_man.cpt
 bathcpt=bath_man.cpt
 # maptitle=""
+# set default caalog NOA
+eqcatalog=full_NOA.catalog
+pth2param=default-param
 
 # # //////////////////////////////////////////////////////////////////////////////
 # # Set default REGION for GREECE
@@ -122,6 +125,11 @@ do
 			shift
 			shift
 			;;
+		-param)
+			pth2param=$2
+			shift
+			shift
+			;;
 		-mt)
 			maptitle=$2
 			shift
@@ -159,6 +167,11 @@ do
 			FAULTS=1
 			shift
 			;;	
+		-cat)
+			eqcatalog=$2
+			shift
+			shift
+			;;
 		-histeq)
 			HISTEQ=1
 			shift
@@ -199,6 +212,16 @@ done
 	echo " Default param file: default-param"
 	echo "/******************************************************************************/"
 
+	
+##LOAD DEFAULT PARAMETERS
+if [ ! -f "$pth2param" ]
+then
+	echo "parameters file doesnot exist, use default or another one"
+	exit 1
+else
+	echo "... load deafault parameters file ..."
+	source $pth2param
+fi
 
 # //////////////////////////////////////////////////////////////////////////////
 # check if files exist
@@ -214,10 +237,11 @@ then
 fi
 
 ###check NOA catalogue
-if [ ! -f full_NOA.catalogue ]
+if [ ! -f $eqcatalog ]
 then
-	echo "NOA CATALOGUE does not exist, will be doanloaded, use -updcat switch next time"
+	echo "EQ CATALOGUE does not exist, NOA will be doanloaded, use -updcat switch next time"
 	UPDCAT=1
+	eqcatalog=full_NOA.catalogue
 fi
 
 ###check HISTORIC earthquakes
@@ -261,7 +285,7 @@ fi
 # UPDATE NOA CATALOGUE
 if [ "$UPDCAT" -eq 1 ]
 then
-	wget http://www.gein.noa.gr/services/full_catalogue.php -O full_NOA.catalogue
+	wget http://www.gein.noa.gr/services/full_catalogue.php -O full_NOA.catalog
 fi
 # ####################### TOPOGRAPHY ###########################
 if [ "$TOPOGRAPHY" -eq 0 ]
@@ -317,7 +341,7 @@ fi
 #////////////////////////////////////////////////////////////////
 #create temporary earthquake files
 #select with years
-awk 'NR != 2 {if ($1>='$starty' && $1<='$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
+awk 'NR != 2 {if ($1>='$starty' && $1<='$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' $eqcatalog > tmp-eq1 #full_NOA.catalogue > tmp-eq1
 #select with magnitude
 # awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
 cat tmp-eq1>tmp-eq2
@@ -406,7 +430,7 @@ echo "G 0.2c" >> .legend
 echo "D 0.3c 1p" >> .legend
 echo "G 0.3c" >> .legend
 # echo "B seis2.cpt 0.2i 0.2i" >> .legend
-echo "T Earthquake data automated recovered via NOA catalogue" >> .legend
+echo "T Earthquake data automated recovered via NOA catalog" >> .legend
 echo "G 1.6c" >> .legend
 echo "D 0.3c 1p" >> .legend
 echo "T NOA FAULTS CATALOGUE after Ganas et.al, 2013" >> .legend

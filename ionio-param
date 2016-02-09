@@ -1,0 +1,68 @@
+#!/bin/bash
+#use this file to cheange default parameters for plots
+# //////////////////////////////////////////////////////////////////////////////
+# Set PATHS parameters
+pth2dems=${HOME}/Map_project/dems
+inputTopoL=${pth2dems}/ETOPO1_gr_resample01m.grd #ETOPO1_Bed_g_gmt4.grd
+inputTopoB=${pth2dems}/ETOPO1_gr_resample01m.grd #ETOPO1_Bed_g_gmt4.grd
+pth2logos=$HOME/Map_project/logos/DSOlogo2.eps
+pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
+
+# # //////////////////////////////////////////////////////////////////////////////
+# # Set default REGION for GREECE
+# west=19
+# east=30.6
+# south=33
+# north=42
+# projscale=6000000
+# frame=2
+# gmt	gmtset PS_MEDIA 26cx22c
+# scale="-Lf20/33.5/36:24/100+l+jr"
+# # range="-R$west/$east/$south/$north"
+# # proj="-Jm24/37/1:$projscale"
+# logo_pos="BL/6c/-1.5c/DSO[at]ntua"
+# logo_pos2="-C16c/15.6c"
+# legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"	
+# # maptitle="Seismicity from $starty to $stopy"
+
+# # //////////////////////////////////////////////////////////////////////////////
+# # Set default REGION for CENTRAL GREECE
+# west=20
+# east=24.5
+# south=37.2
+# north=39
+# projscale=2000000
+# frame=1
+# gmt	gmtset PS_MEDIA 29cx15c
+# scale="-Lf20/33.5/36:24/100+l+jr"
+# logo_pos="BL/6c/-1.5c/DSO[at]ntua"
+# logo_pos2="-C19c/10.8c"
+# legendc="-Jx1i -R0/8/0/8 -Dx21c/8.6c/3.6c/3.5c/BL"	
+
+# //////////////////////////////////////////////////////////////////////////////
+Set default REGION for IONIO - PATRA
+west=20
+east=22.4
+south=37.3
+north=39.2
+projscale=1250000
+frame=1
+gmt	gmtset PS_MEDIA 26cx22c
+scale="-Lf20/33.5/36:24/100+l+jr"
+logo_pos="BL/6c/-1.5c/DSO[at]ntua"
+logo_pos2="-C15.6c/15.9c"
+legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"	
+
+# # //////////////////////////////////////////////////////////////////////////////
+# # Set default REGION for STEREA
+# west=21.8
+# east=24.5
+# south=37.3
+# north=39.2
+# projscale=1400000
+# frame=1
+# gmt	gmtset PS_MEDIA 26cx22c
+# scale="-Lf20/33.5/36:24/100+l+jr"
+# logo_pos="BL/6c/-1.5c/DSO[at]ntua"
+# logo_pos2="-C15.6c/15.9c"
+# legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"	

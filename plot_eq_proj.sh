@@ -16,6 +16,7 @@ function help {
         echo "           -topo [:= update catalogue] title map default none use quotes"
         echo "           -faults [:= faults] plot NOA fault database"
         echo "           -histeq [:= historic eq ] plot historical eq via papazachos catalogue"
+	echo "           -cat (file) [:=catalog] use altern catalog, default NOA"
 	echo ""
         echo "/*** EARTHQUAKE OPTIONS **********************************************************/"
         echo "           -minmw [:= minimum magnitude]  bug use only int"
@@ -81,6 +82,8 @@ out_jpg=plot_eq_proj.jpg
 landcpt=land_man.cpt
 bathcpt=bath_man.cpt
 # maptitle=""
+# set default caalog NOA
+eqcatalog=full_NOA.catalog
 
 # # //////////////////////////////////////////////////////////////////////////////
 # # Set default REGION for GREECE
@@ -169,6 +172,11 @@ do
 			HISTEQ=1
 			shift
 			;;
+		-cat)
+			eqcatalog=$2
+			shift
+			shift
+			;;
 		-eqproj)
 			EQPROJ=1
 			prclon=$2
@@ -243,7 +251,7 @@ then
 fi
 
 ###check NOA catalogue
-if [ ! -f full_NOA.catalogue ]
+if [ ! -f $eqcatalog ]
 then
 	echo "NOA CATALOGUE does not exist, will be doanloaded, use -updcat switch next time"
 	UPDCAT=1
@@ -353,7 +361,7 @@ fi
 #////////////////////////////////////////////////////////////////
 #create temporary earthquake files
 #select with years
-awk 'NR != 2 {if ($1>='$starty' && $1<'$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
+awk 'NR != 2 {if ($1>='$starty' && $1<'$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' $eqcatalog > tmp-eq1
 #select with magnitude
 # awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
 cat tmp-eq1>tmp-eq2
