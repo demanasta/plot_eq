@@ -1,7 +1,6 @@
 # Introduction
-=======
 
-This repository includes bash scripts that use [Generic Tool Maps (Wessel et al., 2013)](http://gmt.soest.hawaii.edu/projects/gmt) to plot National Observatory of Athens [NOA](http://www.noa.gr/index.php?lang=en) earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot earthquake profiles ...
+This repository includes bash scripts that use [Generic Mapping Tools (Wessel et al., 2013)](http://gmt.soest.hawaii.edu/projects/gmt) to plot National Observatory of Athens [NOA](http://www.noa.gr/index.php?lang=en) earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot earthquake profiles ...
 
 <!-- [![Build Status](https://api.travis-ci.org/kks32/phd-thesis-template.svg)](https://travis-ci.org/kks32/phd-thesis-template) -->
 [![License GPL-3.0](http://img.shields.io/badge/license-GPL-brightgreen.svg)](LICENSE)
@@ -20,8 +19,6 @@ This repository includes bash scripts that use [Generic Tool Maps (Wessel et al.
  4. get_catalogue.sh : this script will download the [NOA earthquake catalogue](http://www.gein.noa.gr/services/full_catalogue.php)  and [fault database (Ganas et al., 2013)](http://www.gein.noa.gr/services/GPSData/1_NOAFaults/)
 
 # Documentation
-============
-----------
 
  - Be sure that gmt is installed on your computer
  - Configure file *default-param*.
@@ -81,15 +78,16 @@ For main scripts help function run:
  
 
  Exit Status:    1 -> help message or error
+ 
  Exit Status: >= 0 -> sucesseful exit
 
 ## Example:
 ```
-$> ./plot_eq.sh -topo -faults -jpg -leg
+$ ./plot_eq.sh -topo -faults -jpg -leg
 ```
 
+![output plot of Example](https://raw.githubusercontent.com/demanasta/plot_eq/master/Example1.jpg)
 
-----------
 ----------
 **plot_eq_proj.sh**
 In these script added an optio to plot rofile of earthquakes
@@ -109,17 +107,17 @@ Wmin, Wmax: Profile width on the two sides of profile
 depth: depth of profile
 
 # Updates
-========
+
 - 21-1-2015: online version is available
 
 # References
-=========
+
 Ganas Athanassios, Oikonomou Athanassia I., and Tsimi Christina, 2013. NOAFAULTS: a digital database for active faults in Greece. Bulletin of the Geological Society of Greece, vol. XLVII and Proceedings of the 13th International Congress, Chania, Sept. 2013.
 
 Wessel, P., W. H. F. Smith, R. Scharroo, J. F. Luis, and F. Wobbe, Generic Mapping Tools: Improved version released, EOS Trans. AGU, 94, 409-410, 2013.
 
 # Contact
-=========
+
 Demitris Anastasiou, danast@mail.ntua.gr
 
 Xanthos Papanikolaou, xanthos@mail.ntua.gr
