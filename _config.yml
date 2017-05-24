@@ -1,0 +1,8 @@
+title: Create maps of earthquakes distribution
+description: Plot earthquake NOA catalogue and profiles
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-dinky
+
+gems:
+  - jekyll-mentions
