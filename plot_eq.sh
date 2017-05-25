@@ -1,10 +1,11 @@
 #!/bin/bash
+version="1.0.1"
 # //////////////////////////////////////////////////////////////////////////////
 # HELP FUNCTION
 function help {
 	echo "/******************************************************************************/"
 	echo " Program Name : plot_eq.sh"
-	echo " Version : v-0.1"
+	echo " Version : v${version}"
 	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
 	echo " Default param file: default-param"
 	echo " Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg "
@@ -207,7 +208,7 @@ done
 #////////////START
 	echo "/******************************************************************************/"
 	echo " Program Name : plot_eq.sh"
-	echo " Version : v-0.1"
+	echo " Version : v${version}"
 	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
 	echo " Default param file: default-param"
 	echo "/******************************************************************************/"

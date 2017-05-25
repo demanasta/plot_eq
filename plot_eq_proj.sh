@@ -1,11 +1,12 @@
 #!/bin/bash
+version="1.0.1"
 # //////////////////////////////////////////////////////////////////////////////
 # HELP FUNCTION
 function help {
 	echo "/******************************************************************************/"
 	echo " Program Name : plot_eq_proj.sh"
-	echo " Version : v-0.1"
-	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
+	echo " Version : v${version}"
+	echo " Purpose : Plot earthquakes of NOA catalogue for Greece and projection"
 	echo " Default param file: default-param"
 	echo " Usage   : plot_eq.sh -r west east south north |  | -o [output] | -jpg "
 	echo " Switches: "
@@ -227,8 +228,8 @@ done
 #///START
 	echo "/******************************************************************************/"
 	echo " Program Name : plot_eq_proj.sh"
-	echo " Version : v-0.1"
-	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
+	echo " Version : v${version}"
+	echo " Purpose : Plot earthquakes of NOA catalogue for Greece and projection"
 	echo " Default param file: default-param"
 	echo "/******************************************************************************/"
 # //////////////////////////////////////////////////////////////////////////////
@@ -353,7 +354,7 @@ fi
 if [ "$HISTEQ" -eq 1 ]
 then
 # 	awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
-	echo "plot HISTORIC Earthquakes, Papazachos ana Papazacho catalogue"
+	echo "plot HISTORIC Earthquakes, Papazachos ana Papazachou catalogue"
 	awk -F, '{print $5,$4,$7}' papazachos_db | gmt psxy -R -J -O -K  -W.1 -Ss.11 -Gblack >> $outfile
 	
 fi
@@ -465,29 +466,46 @@ then
 	# awk '{print($8,$7,$9)}' tmp-eq45 | project -C21/36 -A90 -W-1/1 -L0/4 > projection.dat
 	awk '{print($8,$7,$9)}' tmp-proj | gmt project -C${prclon}/${prclat} -A${praz} -Fxyzpqrs -W${prwmin}/${prwmax} -L${prlmin}/${prlmax}  -V -Q> projection.dat
 	awk '{print $1, $2}' projection.dat | gmt psxy -R -J -O -K -Sc0.1 -G0/0/0 >>$outfile
-	awk '{print $6,$7}' projection.dat | gmt psxy -R -J -O -K -Sc0.1 -G0/0/255 >>$outfile
+# 	awk '{print $6,$7}' projection.dat | gmt psxy -R -J -O -K -Sc0.1 -G0/0/255 >>$outfile
+	
+	prtw=$(sort -k6 -k7 projection.dat | head -n1 | awk '{print $6}')
+	prts=$(sort -k6 -k7 projection.dat | head -n1 | awk '{print $7}')
+	echo "$prtw $prts 13 0 1 RT A" | gmt pstext -Jm -R  -G180 -O -V -K >> $outfile
+	
+	prte=$(sort -k6 -k7 projection.dat | tail -n1 | awk '{print $6}')
+	prtn=$(sort -k6 -k7 projection.dat | tail -n1 | awk '{print $7}')
+	echo "$prte $prtn 13 0 1 LB B" | gmt pstext -Jm -R  -G180 -O -V -K >> $outfile
+
+	echo "$prtw $prts" > tmp-line
+	echo "$prte $prtn" >>tmp-line
+	gmt psxy tmp-line -R -J -O -K -W1,blue >> $outfile
 
 	west=${prlmin}
 	east=${prlmax}
 	dmin=0 
 	dmax=$prdepth
-
+	dstep=$(echo print $dmax/6 | python)
+	
 	proj=-JX17.5/-5
-	tick=-B50:Distance\(km\):/10:Depth:WSen
+	tick=-B50:Distance\(km\):/$dstep:Depth\(km\):WSen
 	# proj="-Jx0.2/0.2"
 	# tick="-Ba5f5g0/a5f5g0"
-
+	
 
 	awk '{print $4,$3}' projection.dat | gmt psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.1 -G200 -O  -Y-6.5c -P -K >> $outfile
+	
+	echo "$west $dmin 13 0 1 LT A" | gmt pstext -J -R -Dj0c/0.3c -G180 -Y.9c -O -V -K >> $outfile
+	echo "$east $dmin 13 0 1 RT B" | gmt pstext -J -R -Dj0c/0.3c -G180 -O -V -K >> $outfile
 fi
 
+echo "9999 9999" | gmt psxy -J -R -Y-.9c -K -O >> $outfile
 
 
-echo "G 0.2c" >> .legend
+echo "G 1.5c" >> .legend
 echo "D 0.3c 1p" >> .legend
 echo "G 0.5c" >> .legend
 # echo "B seis2.cpt 0.2i 0.2i" >> .legend
-echo "T Earthquake data automated recovered via NOA catalogue" >> .legend
+# echo "T Earthquake data automated recovered via NOA catalogue" >> .legend
 
 # ///////////////// PLOT LEGEND //////////////////////////////////
 if [ "$LEGEND" -eq 1 ]
