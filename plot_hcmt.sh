@@ -12,6 +12,7 @@ function help {
 	echo " Switches: "
         echo "           -r [:= region] region to plot west east south north (default Greece)"
         echo "                   use: -r west east south north projscale frame"
+	echo "           -param (paramfile) change default parmeters file"
         echo "           -mt [:= map title] title map default none use quotes"
         echo "           -updcat [:= update catalogue] title map default none use quotes"
         echo "           -topo [:= update catalogue] title map default none use quotes"
@@ -57,9 +58,7 @@ LEGEND=0
 UPDCAT=0
 HISTEQ=0
 
-##LOAD DEFAULT PARAMETERS
-echo "... load deafault parameters file ..."
-source default-param
+
 # # //////////////////////////////////////////////////////////////////////////////
 # # Set PATHS parameters
 # pth2dems=${HOME}/Map_project/dems
@@ -77,6 +76,7 @@ out_jpg=plot_hcmt.jpg
 landcpt=land_man.cpt
 bathcpt=bath_man.cpt
 # maptitle=""
+pth2param=default-param
 
 # # //////////////////////////////////////////////////////////////////////////////
 # # Set default REGION for GREECE
@@ -120,6 +120,11 @@ do
 			shift
 			shift
 			shift
+			shift
+			shift
+			;;
+		-param)
+			pth2param=$2
 			shift
 			shift
 			;;
@@ -197,9 +202,20 @@ done
 	echo " Program Name : plot_hcmt.sh"
 	echo " Version : v${version}"
 	echo " Purpose : Plot earthquakes  and historic cmt"
-	echo " Default param file: default-param"
+	echo " Parameters file: ${pth2param}"
 	echo "/******************************************************************************/"
 
+# //////////////////////////////////////////////////////////////////////////////
+#LOAD DEFAULT PARAMETERS
+echo "... load default parameters file ..."
+##//////////////////check default param
+if [ ! -f ${pth2param} ]
+then
+	echo "ERROR: parameters file does not exist, use default or another one"
+	exit 1
+else
+	source default-param
+fi
 
 # //////////////////////////////////////////////////////////////////////////////
 # check if files exist

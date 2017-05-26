@@ -210,14 +210,14 @@ done
 	echo " Program Name : plot_eq.sh"
 	echo " Version : v${version}"
 	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
-	echo " Default param file: default-param"
+	echo " Parameters file: ${pth2param}"
 	echo "/******************************************************************************/"
 
 	
 ##LOAD DEFAULT PARAMETERS
 if [ ! -f "$pth2param" ]
 then
-	echo "parameters file doesnot exist, use default or another one"
+	echo "ERROR: parameters file does not exist, use default or another one"
 	exit 1
 else
 	echo "... load deafault parameters file ..."
