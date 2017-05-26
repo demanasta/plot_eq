@@ -207,14 +207,14 @@ done
 
 # //////////////////////////////////////////////////////////////////////////////
 #LOAD DEFAULT PARAMETERS
-echo "... load default parameters file ..."
 ##//////////////////check default param
 if [ ! -f ${pth2param} ]
 then
 	echo "ERROR: parameters file does not exist, use default or another one"
 	exit 1
 else
-	source default-param
+	echo "... load default parameters file ..."
+	source ${pth2param}
 fi
 
 # //////////////////////////////////////////////////////////////////////////////
