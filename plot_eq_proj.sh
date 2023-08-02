@@ -1,5 +1,5 @@
 #!/bin/bash
-version="1.0.1"
+version="2.0.0"
 # //////////////////////////////////////////////////////////////////////////////
 # HELP FUNCTION
 function help {
@@ -42,6 +42,9 @@ function help {
 	echo ""
 	echo "run: ./plot_eq_proj.sh -topo -faults -jpg -leg -eqproj [parameters]"
 	echo "/******************************************************************************/"
+    echo " History:"
+    echo "   2017.xx.xx : Initial v1.0.1 version"
+    echo "   2023.08.02 : turn to GMT v6.3"
 	exit 1
 }
 
@@ -173,7 +176,7 @@ do
 		-faults)
 			FAULTS=1
 			shift
-			;;	
+			;;
 		-histeq)
 			HISTEQ=1
 			shift
@@ -307,7 +310,7 @@ fi
 
 
 # tick='-B2/2WSen'
-# 
+#
 # proj='-Jm24/37/1:6000000'
 # //////////////////////////////////////////////////////////////////////////////
 # SET REGION PROPERTIES
@@ -318,7 +321,7 @@ gmt	gmtset PS_MEDIA 26cx28c
 	proj="-Jm24/37/1:$projscale"
 	logo_pos="BL/11.2c/0.2c/DSO[at]ntua"
 	logo_pos2="-C16c/7.3c"
-	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/19.6c/3.6c/3.5c/BL"	
+	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/19.6c/3.6c/3.5c/BL"
 	maptitle="Seismicity from $starty to $stopy"
 # //////////////////////////////////////////////////////////////////////////////
 # UPDATE NOA CATALOGUE
@@ -329,7 +332,7 @@ fi
 # ####################### TOPOGRAPHY ###########################
 if [ "$TOPOGRAPHY" -eq 0 ]
 then
-	################## Plot coastlines only ######################	
+	################## Plot coastlines only ######################
 gmt	psbasemap $range $proj $scale -B$frame:."$maptitle": -P -K -Y8.5c > $outfile
 gmt	pscoast -R -J -O -K -W0.25 -G195 -Df -Na -U$logo_pos >> $outfile
 # 	pscoast -Jm -R -Df -W0.25p,black -G195  -U$logo_pos -K -O -V >> $outfile
@@ -339,11 +342,11 @@ if [ "$TOPOGRAPHY" -eq 1 ]
 then
 	# ####################### TOPOGRAPHY ###########################
 	# bathymetry
-gmt	makecpt -Cgebco.cpt -T-7000/0/150 -Z > $bathcpt
+gmt	makecpt -Cgebco -T-7000/0/150 -Z > $bathcpt
 gmt	grdimage $inputTopoB $range $proj -C$bathcpt -K  -Y8.5c> $outfile
 gmt	pscoast $proj -P $range -Df -Gc -K -O >> $outfile
 	# land
-gmt	makecpt -Cgray.cpt -T-3000/1800/50 -Z > $landcpt
+gmt	makecpt -Cgray -T-3000/1800/50 -Z > $landcpt
 gmt	grdimage $inputTopoL $range $proj -C$landcpt  -K -O >> $outfile
 gmt	pscoast -R -J -O -K -Q >> $outfile
 	#------- coastline -------------------------------------------
@@ -352,11 +355,11 @@ gmt	pscoast -J -R -Df -W0.25p,black -K  -O -U$logo_pos >> $outfile
 fi
 
 # psbasemap -R$west/$east/$south/$north $proj $tick -P -Y12 -K > $out
-# 
+#
 # makecpt -Crelief -T-8000/8000/500 -Z > topo.cpt
-# 
+#
 # grdimage $topo -R -J -O -K -Ctopo.cpt   >> $out
-# 
+#
 # pscoast -R -J -O -K -W0.25 -G195 -Df -Na -Ia -Lf-130.8/46/10/200+lkm >> $outfile
 
 #////////////////////////////////////////////////////////////////
@@ -374,7 +377,7 @@ then
 # 	awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
 	echo "plot HISTORIC Earthquakes, Papazachos ana Papazachou catalogue"
 	awk -F, '{print $5,$4,$7}' papazachos_db | gmt psxy -R -J -O -K  -W.1 -Ss.11 -Gblack >> $outfile
-	
+
 fi
 
 #////////////////////////////////////////////////////////////////
@@ -403,7 +406,7 @@ echo "D 0.3c 1p" >> .legend
 echo "N 1" >> .legend
 
 #////////////////////////////////////////////////////////////////
-#plot 
+#plot
 gmt	makecpt -Cseis -T0/150/10 -Z > seis2.cpt
 if [ "$minmw" -lt 2 ] && [ "$maxmw" -gt 2 ]
 then
@@ -447,7 +450,7 @@ then
 	echo "G 0.25c" >> .legend
 	echo "S 0.4c a 0.8c 160 0.22p 0.9c 6 =< Mw" >> .legend
 fi
-# awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out 
+# awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out
 
 gmt	psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 
@@ -457,17 +460,17 @@ gmt	psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 
 # ////////////////////////////////////////////////////PLOT PROJECTION!!! ////////////////////////////////
 # awk '{print($4,$3,$5)}' $seis_data | project -C21/36 -A45 -W-.2/.2 -L0/4 -H15 > projection.dat
-# 
-# 
+#
+#
 # east=25
-# west=21 
-# dmin=0 
+# west=21
+# dmin=0
 # dmax=50
-# 
+#
 # proj=-JX15/-5
 # tick=-B1:Longitude:/10:Depth:WSen
-# 
-# 
+#
+#
 # awk '{print($6,$3)}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.2 -G200 -O  -Y-8 -P >> $out
 echo "G 0.2c" >> .legend
 echo "D 0.3c 1p" >> .legend
@@ -485,11 +488,11 @@ then
 	awk '{print($8,$7,$9)}' tmp-proj | gmt project -C${prclon}/${prclat} -A${praz} -Fxyzpqrs -W${prwmin}/${prwmax} -L${prlmin}/${prlmax}  -V -Q> projection.dat
 	awk '{print $1, $2}' projection.dat | gmt psxy -R -J -O -K -Sc0.1 -G0/0/0 >>$outfile
 # 	awk '{print $6,$7}' projection.dat | gmt psxy -R -J -O -K -Sc0.1 -G0/0/255 >>$outfile
-	
+
 	prtw=$(sort -k6 -k7 projection.dat | head -n1 | awk '{print $6}')
 	prts=$(sort -k6 -k7 projection.dat | head -n1 | awk '{print $7}')
 	echo "$prtw $prts 13 0 1 RT A" | gmt pstext -Jm -R  -G180 -O -V -K >> $outfile
-	
+
 	prte=$(sort -k6 -k7 projection.dat | tail -n1 | awk '{print $6}')
 	prtn=$(sort -k6 -k7 projection.dat | tail -n1 | awk '{print $7}')
 	echo "$prte $prtn 13 0 1 LB B" | gmt pstext -Jm -R  -G180 -O -V -K >> $outfile
@@ -500,18 +503,18 @@ then
 
 	west=${prlmin}
 	east=${prlmax}
-	dmin=0 
+	dmin=0
 	dmax=$prdepth
 	dstep=$(echo print $dmax/6 | python)
-	
+
 	proj=-JX17.5/-5
 	tick=-B50:Distance\(km\):/$dstep:Depth\(km\):WSen
 	# proj="-Jx0.2/0.2"
 	# tick="-Ba5f5g0/a5f5g0"
-	
+
 
 	awk '{print $4,$3}' projection.dat | gmt psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.1 -G200 -O  -Y-6.5c -P -K >> $outfile
-	
+
 	echo "$west $dmin 13 0 1 LT A" | gmt pstext -J -R -Dj0c/0.3c -G180 -Y.9c -O -V -K >> $outfile
 	echo "$east $dmin 13 0 1 RT B" | gmt pstext -J -R -Dj0c/0.3c -G180 -O -V -K >> $outfile
 fi

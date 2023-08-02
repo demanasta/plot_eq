@@ -6,7 +6,7 @@ pth2dems=${HOME}/Map_project/dems
 inputTopoL=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
 inputTopoB=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
 pth2logos=$HOME/Map_project/logos/DSOlogo2.eps
-pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
+pth2faults=$HOME/Map_project/faults/NOAFaults_v5.01.gmt
 
 # //////////////////////////////////////////////////////////////////////////////
 # Set default REGION for GREECE

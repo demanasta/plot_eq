@@ -1,10 +1,10 @@
 #!/bin/bash
-verion="1.0.1"
+verion="2.0.0"
 # //////////////////////////////////////////////////////////////////////////////
 # HELP FUNCTION
 function help {
 	echo "/******************************************************************************/"
-	echo " Program Name : plot_eq.sh"
+	echo " Program Name : plot_hcmt.sh"
 	echo " Version : v${version}"
 	echo " Purpose : Plot earthquakes of NOA catalogue for Greece and historic cmt"
 	echo " Default param file: default-param"
@@ -15,7 +15,7 @@ function help {
 	echo "           -param (paramfile) change default parmeters file"
         echo "           -mt [:= map title] title map default none use quotes"
         echo "           -updcat [:= update catalogue] title map default none use quotes"
-        echo "           -topo [:= update catalogue] title map default none use quotes"
+        echo "           -topo [:= topography] plot bathymetry and land "
         echo "           -faults [:= faults] plot NOA fault database"
         echo "           -histeq [:= historic eq ] plot historical eq via papazachos catalogue"
 	echo ""
@@ -35,8 +35,11 @@ function help {
 	echo " Exit Status:    1 -> help message or error"
 	echo " Exit Status: >= 0 -> sucesseful exit"
 	echo ""
-	echo "run: ./plot_eq.sh -topo -faults -jpg -leg"
+	echo "run: ./plot_hcmt.sh -topo -faults -jpg -leg"
 	echo "/******************************************************************************/"
+    echo " History:"
+    echo "   2017.xx.xx : Initial v1.0.1 version"
+    echo "   2023.08.02 : turn to GMT v6.3"
 	exit 1
 }
 
@@ -164,7 +167,7 @@ do
 		-faults)
 			FAULTS=1
 			shift
-			;;	
+			;;
 		-histeq)
 			HISTEQ=1
 			shift
@@ -272,7 +275,7 @@ fi
 	proj="-Jm24/37/1:$projscale"
 # 	logo_pos="BL/6c/-1.5c/DSO[at]ntua"
 # 	logo_pos2="-C16c/15.6c"
-# 	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"	
+# 	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"
 	maptitle="Seismicity from $starty to $stopy"
 # //////////////////////////////////////////////////////////////////////////////
 # UPDATE NOA CATALOGUE
@@ -283,7 +286,7 @@ fi
 # ####################### TOPOGRAPHY ###########################
 if [ "$TOPOGRAPHY" -eq 0 ]
 then
-	################## Plot coastlines only ######################	
+	################## Plot coastlines only ######################
 gmt	psbasemap $range $proj $scale -B$frame:."$maptitle": -P -K > $outfile
 gmt	pscoast -R -J -O -K -W0.25 -G195 -Df -Na -U$logo_pos >> $outfile
 # 	pscoast -Jm -R -Df -W0.25p,black -G195  -U$logo_pos -K -O -V >> $outfile
@@ -293,11 +296,11 @@ if [ "$TOPOGRAPHY" -eq 1 ]
 then
 	# ####################### TOPOGRAPHY ###########################
 	# bathymetry
-gmt	makecpt -Cgebco.cpt -T-7000/0/150 -Z > $bathcpt
+gmt	makecpt -Cgebco -T-7000/0/150 -Z > $bathcpt
 gmt	grdimage $inputTopoB $range $proj -C$bathcpt -K > $outfile
 gmt	pscoast $proj -P $range -Df -Gc -K -O >> $outfile
 	# land
-gmt	makecpt -Cgray.cpt -T-3000/1800/50 -Z > $landcpt
+gmt	makecpt -Cgray -T-3000/1800/50 -Z > $landcpt
 gmt	grdimage $inputTopoL $range $proj -C$landcpt  -K -O >> $outfile
 gmt	pscoast -R -J -O -K -Q >> $outfile
 	#------- coastline -------------------------------------------
@@ -306,11 +309,11 @@ gmt	pscoast -J -R -Df -W0.25p,black -K  -O -U$logo_pos >> $outfile
 fi
 
 # psbasemap -R$west/$east/$south/$north $proj $tick -P -Y12 -K > $out
-# 
+#
 # makecpt -Crelief -T-8000/8000/500 -Z > topo.cpt
-# 
+#
 # grdimage $topo -R -J -O -K -Ctopo.cpt   >> $out
-# 
+#
 # pscoast -R -J -O -K -W0.25 -G195 -Df -Na -Ia -Lf-130.8/46/10/200+lkm >> $outfile
 
 #////////////////////////////////////////////////////////////////
@@ -328,7 +331,7 @@ then
 # 	awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
 	echo "plot HISTORIC Earthquakes, Papazachos ana Papazacho catalogue"
 	awk -F, '{print $5,$4,$7}' papazachos_db |gmt psxy -R -J -O -K  -W.1 -Ss.19 -Gblack >> $outfile
-	
+
 fi
 
 #////////////////////////////////////////////////////////////////
@@ -353,19 +356,19 @@ gmt	psmeca papazachos.cmt -R -Jm -Sa0.4 -h1 -CP0.25 -K -O -P >> $outfile
 # awk 'NR != 0 {if ($10>=4 && $10<5) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq45
 # awk 'NR != 0 {if ($10>=5 && $10<6) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq56
 # awk 'NR != 0 {if ($10>=6 && $10<8) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq2 > tmp-eq68
-# 
+#
 # # start create legend file .legend
 # echo "G 0.2c" > .legend
 # # echo "H 10 Times-Roman FROM: $starty" >> .legend
 # # echo "H 10 Times-Roman   TO: $stopy" >> .legend
 # echo "G 0.2c" > .legend
-# 
+#
 # echo "H 11 Times-Roman Magnitude" >> .legend
 # echo "D 0.3c 1p" >> .legend
 # echo "N 1" >> .legend
-# 
+#
 # #////////////////////////////////////////////////////////////////
-# #plot 
+# #plot
 # gmt	makecpt -Cseis -T0/150/10 -Z > seis2.cpt
 # if [ "$minmw" -lt 2 ] && [ "$maxmw" -gt 2 ]
 # then
@@ -403,7 +406,7 @@ gmt	psmeca papazachos.cmt -R -Jm -Sa0.4 -h1 -CP0.25 -K -O -P >> $outfile
 # 	echo "G 0.25c" >> .legend
 # 	echo "S 0.4c a 0.8c 160 0.22p 0.9c 6 =< Mw" >> .legend
 # fi
-# awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out 
+# awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out
 
 gmt psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 ## SCALE FOR CENTRAL GREECE
@@ -415,17 +418,17 @@ gmt psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 
 # ////////////////////////////////////////////////////PLOT PROJECTION!!! ////////////////////////////////
 # awk '{print($4,$3,$5)}' $seis_data | project -C21/36 -A45 -W-.2/.2 -L0/4 -H15 > projection.dat
-# 
-# 
+#
+#
 # east=25
-# west=21 
-# dmin=0 
+# west=21
+# dmin=0
 # dmax=50
-# 
+#
 # proj=-JX15/-5
 # tick=-B1:Longitude:/10:Depth:WSen
-# 
-# 
+#
+#
 # awk '{print($6,$3)}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.2 -G200 -O  -Y-8 -P >> $out
 echo "G 0.2c" >> .legend
 echo "D 0.3c 1p" >> .legend
