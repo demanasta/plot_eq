@@ -13,11 +13,12 @@ This repository includes bash scripts that use [Generic Tool Maps (Wessel et al.
 
  1. plot_eq.sh : plot earthquakes
  2. plot_eq_proj.sh : plot earthquakes and profiles
+ 3. plot_hcmt.sh : plot moment tensors from historic earthquakes
 
 **helpful files**
 
- 3. default-param : default parameters for paths, input files and region configuration
- 4. get_catalogue.sh : this script download [earthquake NOA catalogue](http://www.gein.noa.gr/services/full_catalogue.php)  and [fault database (Ganas et al., 2013)](http://www.gein.noa.gr/services/GPSData/1_NOAFaults/)
+ 4. default-param : default parameters for paths, input files and region configuration
+ 5. get_catalogue.sh : this script download [earthquake NOA catalogue](http://www.gein.noa.gr/services/full_catalogue.php)  and [fault database (Ganas et al., 2020)](http://www.gein.noa.gr/services/GPSData/1_NOAFaults/)
 
 Documentation
 ============
@@ -35,7 +36,7 @@ pth2dems=${HOME}/Map_project/dems
 inputTopoL=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
 inputTopoB=${pth2dems}/ETOPO1_Bed_g_gmt4.grd
 pth2logos=$HOME/Map_project/logos
-pth2faults=$HOME/Map_project/faults/NOAFaults_v1.0.gmt
+pth2faults=$HOME/Map_project/faults/NOAFaults_v5.01.gmt
 
 #///////////////////
 # Set default REGION for GREECE
@@ -108,13 +109,13 @@ depth: depth of profile
 
 References
 =========
-Ganas Athanassios, Oikonomou Athanassia I., and Tsimi Christina, 2013. NOAFAULTS: a digital database for active faults in Greece. Bulletin of the Geological Society of Greece, vol. XLVII and Proceedings of the 13th International Congress, Chania, Sept. 2013.
+Athanassios Ganas. (2023). NOAFAULTS KMZ layer Version 5.0 (V5.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.8075517
 
-Wessel, P., W. H. F. Smith, R. Scharroo, J. F. Luis, and F. Wobbe, Generic Mapping Tools: Improved version released, EOS Trans. AGU, 94, 409-410, 2013.
+Wessel, P., Luis, J. F., Uieda, L., Scharroo, R., Wobbe, F., Smith, W. H. F., & Tian, D. (2019). The Generic Mapping Tools version 6. Geochemistry, Geophysics, Geosystems, 20, 5556–5564. https://doi.org/10.1029/2019GC008515
 
 Contact
 =========
-Demitris Anastasiou, danast@mail.ntua.gr
+Dimitris Anastasiou, danastasiou@mail.ntua.gr
 
 Xanthos Papanikolaou, xanthos@mail.ntua.gr
 
