@@ -1,29 +1,31 @@
 #!/bin/bash
+version="2.0"
 # //////////////////////////////////////////////////////////////////////////////
 # HELP FUNCTION
 function help {
 	echo "/******************************************************************************/"
 	echo " Program Name : plot_eq.sh"
-	echo " Version : v-0.1"
+	echo " Version : v${version}"
 	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
 	echo " Default param file: default-param"
 	echo " Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg "
 	echo " Switches: "
         echo "           -r [:= region] region to plot west east south north (default Greece)"
         echo "                   use: -r west east south north projscale frame"
+        echo "           -param (paramfile) change default parmeters file"
         echo "           -mt [:= map title] title map default none use quotes"
-        echo "           -updcat [:= update catalogue] title map default none use quotes"
-        echo "           -topo [:= update catalogue] title map default none use quotes"
+        echo "           -updcat [:= update catalogue] update NOA catalogue"
+        echo "           -topo [:= topography] plot bathymetry and land "
         echo "           -faults [:= faults] plot NOA fault database"
         echo "           -histeq [:= historic eq ] plot historical eq via papazachos catalogue"
-
+        echo "           -cat (file) [:=catalog] use altern catalog, default NOA"
+	echo ""
         echo "/*** EARTHQUAKE OPTIONS **********************************************************/"
         echo "           -minmw [:= minimum magnitude]  bug use only int"
         echo "           -maxmw [:= maximum magnitude]  bug use only int"
 	echo "           -starty [:= start year] "
 	echo "           -stopy [:= stop year] "
-
-
+	echo ""
         echo "/*** OTHER OPRTIONS ************************************************************/"
 	echo "           -o [:= output] name of output files"
 	echo "           -l [:=labels] plot labels"
@@ -34,8 +36,11 @@ function help {
 	echo " Exit Status:    1 -> help message or error"
 	echo " Exit Status: >= 0 -> sucesseful exit"
 	echo ""
-	echo "run: ./plot_eq.sh -topo -faults -jpg -leg"
+	echo "run: ./plot_eq.sh -topo -faults -jpg -legi"
 	echo "/******************************************************************************/"
+    echo " History:"
+    echo "   2017.xx.xx : Initial v1.0.1 version"
+    echo "   2023.08.02 : turn to GMT v6.3"
 	exit 1
 }
 
@@ -57,9 +62,7 @@ LEGEND=0
 UPDCAT=0
 HISTEQ=0
 
-##LOAD DEFAULT PARAMETERS
-echo "... load deafault parameters file ..."
-source default-param
+
 # # //////////////////////////////////////////////////////////////////////////////
 # # Set PATHS parameters
 # pth2dems=${HOME}/Map_project/dems
@@ -77,6 +80,9 @@ out_jpg=plot_eq.jpg
 landcpt=land_man.cpt
 bathcpt=bath_man.cpt
 # maptitle=""
+# set default caalog NOA
+eqcatalog=full_NOA.catalog
+pth2param=default-param
 
 # # //////////////////////////////////////////////////////////////////////////////
 # # Set default REGION for GREECE
@@ -123,6 +129,11 @@ do
 			shift
 			shift
 			;;
+		-param)
+			pth2param=$2
+			shift
+			shift
+			;;
 		-mt)
 			maptitle=$2
 			shift
@@ -159,7 +170,12 @@ do
 		-faults)
 			FAULTS=1
 			shift
-			;;	
+			;;
+		-cat)
+			eqcatalog=$2
+			shift
+			shift
+			;;
 		-histeq)
 			HISTEQ=1
 			shift
@@ -195,11 +211,21 @@ done
 #////////////START
 	echo "/******************************************************************************/"
 	echo " Program Name : plot_eq.sh"
-	echo " Version : v-0.1"
+	echo " Version : v${version}"
 	echo " Purpose : Plot earthquakes of NOA catalogue for Greece"
-	echo " Default param file: default-param"
+	echo " Parameters file: ${pth2param}"
 	echo "/******************************************************************************/"
 
+
+##LOAD DEFAULT PARAMETERS
+if [ ! -f "$pth2param" ]
+then
+	echo "ERROR: parameters file does not exist, use default or another one"
+	exit 1
+else
+	echo "... load deafault parameters file ..."
+	source $pth2param
+fi
 
 # //////////////////////////////////////////////////////////////////////////////
 # check if files exist
@@ -215,10 +241,11 @@ then
 fi
 
 ###check NOA catalogue
-if [ ! -f full_NOA.catalogue ]
+if [ ! -f $eqcatalog ]
 then
-	echo "NOA CATALOGUE does not exist, will be doanloaded, use -updcat switch next time"
+	echo "EQ CATALOGUE does not exist, NOA will be doanloaded, use -updcat switch next time"
 	UPDCAT=1
+	eqcatalog=full_NOA.catalogue
 fi
 
 ###check HISTORIC earthquakes
@@ -250,24 +277,24 @@ fi
 # //////////////////////////////////////////////////////////////////////////////
 # SET REGION PROPERTIES
 	#these are default for GREECE REGION
-gmt	gmtset PS_MEDIA 26cx22c
-	scale="-Lf20/33.5/36:24/100+l+jr"
+# gmt	gmtset PS_MEDIA 26cx22c
+# 	scale="-Lf20/33.5/36:24/100+l+jr"
 	range="-R$west/$east/$south/$north"
 	proj="-Jm24/37/1:$projscale"
-	logo_pos="BL/6c/-1.5c/DSO[at]ntua"
-	logo_pos2="-C16c/15.6c"
-	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"	
+# 	logo_pos="BL/6c/-1.5c/DSO[at]ntua"
+# 	logo_pos2="-C16c/15.6c"
+# 	legendc="-Jx1i -R0/8/0/8 -Dx18.5c/12.6c/3.6c/3.5c/BL"
 	maptitle="Seismicity from $starty to $stopy"
 # //////////////////////////////////////////////////////////////////////////////
 # UPDATE NOA CATALOGUE
 if [ "$UPDCAT" -eq 1 ]
 then
-	wget http://www.gein.noa.gr/services/full_catalogue.php -O full_NOA.catalogue
+	wget http://www.gein.noa.gr/services/full_catalogue.php -O full_NOA.catalog
 fi
 # ####################### TOPOGRAPHY ###########################
 if [ "$TOPOGRAPHY" -eq 0 ]
 then
-	################## Plot coastlines only ######################	
+	################## Plot coastlines only ######################
 gmt	psbasemap $range $proj $scale -B$frame:."$maptitle": -P -K > $outfile
 gmt	pscoast -R -J -O -K -W0.25 -G195 -Df -Na -U$logo_pos >> $outfile
 # 	pscoast -Jm -R -Df -W0.25p,black -G195  -U$logo_pos -K -O -V >> $outfile
@@ -277,11 +304,11 @@ if [ "$TOPOGRAPHY" -eq 1 ]
 then
 	# ####################### TOPOGRAPHY ###########################
 	# bathymetry
-gmt	makecpt -Cgebco.cpt -T-7000/0/150 -Z > $bathcpt
+gmt	makecpt -Cgebco -T-7000/0/150 -Z > $bathcpt
 gmt	grdimage $inputTopoB $range $proj -C$bathcpt -K > $outfile
 gmt	pscoast $proj -P $range -Df -Gc -K -O >> $outfile
 	# land
-gmt	makecpt -Cgray.cpt -T-3000/1800/50 -Z > $landcpt
+gmt	makecpt -Cgray -T-3000/1800/50 -Z > $landcpt
 gmt	grdimage $inputTopoL $range $proj -C$landcpt  -K -O >> $outfile
 gmt	pscoast -R -J -O -K -Q >> $outfile
 	#------- coastline -------------------------------------------
@@ -290,11 +317,11 @@ gmt	pscoast -J -R -Df -W0.25p,black -K  -O -U$logo_pos >> $outfile
 fi
 
 # psbasemap -R$west/$east/$south/$north $proj $tick -P -Y12 -K > $out
-# 
+#
 # makecpt -Crelief -T-8000/8000/500 -Z > topo.cpt
-# 
+#
 # grdimage $topo -R -J -O -K -Ctopo.cpt   >> $out
-# 
+#
 # pscoast -R -J -O -K -W0.25 -G195 -Df -Na -Ia -Lf-130.8/46/10/200+lkm >> $outfile
 
 #////////////////////////////////////////////////////////////////
@@ -311,14 +338,14 @@ if [ "$HISTEQ" -eq 1 ]
 then
 # 	awk '{print $8,$7,$9}' tmp-eq34 | psxy -R -J -O -K  -W.1 -Sc.11 -Cseis2.cpt>> $outfile
 	echo "plot HISTORIC Earthquakes, Papazachos ana Papazacho catalogue"
-	awk -F, '{print $5,$4,$7}' papazachos_db |gmt psxy -R -J -O -K  -W.1 -Ss.11 -Gblack >> $outfile
-	
+	awk -F, '{print $5,$4,$7}' papazachos_db |gmt psxy -R -J -O -K  -W.1 -Ss.27 -Gblack >> $outfile
+
 fi
 
 #////////////////////////////////////////////////////////////////
 #create temporary earthquake files
 #select with years
-awk 'NR != 2 {if ($1>='$starty' && $1<='$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' full_NOA.catalogue > tmp-eq1
+awk 'NR != 2 {if ($1>='$starty' && $1<='$stopy') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' $eqcatalog > tmp-eq1 #full_NOA.catalogue > tmp-eq1
 #select with magnitude
 # awk 'NR != 2 {if ($10>='$minmw' && $10<='$maxmw') print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' tmp-eq1 > tmp-eq2
 cat tmp-eq1>tmp-eq2
@@ -341,7 +368,7 @@ echo "D 0.3c 1p" >> .legend
 echo "N 1" >> .legend
 
 #////////////////////////////////////////////////////////////////
-#plot 
+#plot
 gmt	makecpt -Cseis -T0/150/10 -Z > seis2.cpt
 if [ "$minmw" -lt 2 ] && [ "$maxmw" -gt 2 ]
 then
@@ -379,9 +406,11 @@ then
 	echo "G 0.25c" >> .legend
 	echo "S 0.4c a 0.8c 160 0.22p 0.9c 6 =< Mw" >> .legend
 fi
-# awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out 
+# awk '{print($4,$3,$5)}' $seis_data | psxy -R -J -O -K  -W.1 -Sc.1 -Cseis.cpt -H15 >> $out
 
 gmt psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
+## SCALE FOR CENTRAL GREECE
+# gmt psscale -D21.7c/2.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 
 # psxy center.dat -R -J -O -K -W1 -Sc.3 -G255/0/0 >> $out
 # psxy center.dat -R -J -O -K -W5/255/0/0 >> $out
@@ -389,23 +418,23 @@ gmt psscale -D19.7c/3.1c/-4c/0.6c -B50:Depth:/:km: -Cseis2.cpt -O -K >> $outfile
 
 # ////////////////////////////////////////////////////PLOT PROJECTION!!! ////////////////////////////////
 # awk '{print($4,$3,$5)}' $seis_data | project -C21/36 -A45 -W-.2/.2 -L0/4 -H15 > projection.dat
-# 
-# 
+#
+#
 # east=25
-# west=21 
-# dmin=0 
+# west=21
+# dmin=0
 # dmax=50
-# 
+#
 # proj=-JX15/-5
 # tick=-B1:Longitude:/10:Depth:WSen
-# 
-# 
+#
+#
 # awk '{print($6,$3)}' projection.dat | psxy -R$west/$east/$dmin/$dmax $proj $tick -W1 -Sc.2 -G200 -O  -Y-8 -P >> $out
 echo "G 0.2c" >> .legend
 echo "D 0.3c 1p" >> .legend
 echo "G 0.3c" >> .legend
 # echo "B seis2.cpt 0.2i 0.2i" >> .legend
-echo "T Earthquake data automated recovered via NOA catalogue" >> .legend
+echo "T Earthquake data automated recovered via NOA catalog" >> .legend
 echo "G 1.6c" >> .legend
 echo "D 0.3c 1p" >> .legend
 echo "T NOA FAULTS CATALOGUE after Ganas et.al, 2013" >> .legend
