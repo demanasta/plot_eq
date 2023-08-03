@@ -1,7 +1,10 @@
-Introduction
-=======
+# Introduction
 
-This repository includes bash scripts that use [Generic Tool Maps (Wessel et al., 2013)](http://gmt.soest.hawaii.edu/projects/gmt) to plot National Observatory of Athens (NOA) earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot profile of earthquakes...
+This repository includes bash scripts that use [Generic Mapping Tools (Wessel et al., 2013)](http://gmt.soest.hawaii.edu/projects/gmt) to plot National Observatory of Athens [NOA](http://www.noa.gr/index.php?lang=en) earthquake catalogue and historical earthquakes of Papazachos and Papazachou catalogue for the region of Greece. Also you can plot earthquake profiles ...
+
+<!-- [![Build Status](https://api.travis-ci.org/kks32/phd-thesis-template.svg)](https://travis-ci.org/kks32/phd-thesis-template) -->
+[![License GPL-3.0](http://img.shields.io/badge/license-GPL-brightgreen.svg)](LICENSE)
+[![Version](http://img.shields.io/badge/version-1.0-brightgreen.svg)](https://github.com/demanasta/plot_eq/releases/latest)
 
 <!-- [![Build Status](https://api.travis-ci.org/kks32/phd-thesis-template.svg)](https://travis-ci.org/kks32/phd-thesis-template) -->
 [![License GPL-3.0](http://img.shields.io/badge/license-GPL-brightgreen.svg)](LICENSE)
@@ -20,14 +23,12 @@ This repository includes bash scripts that use [Generic Tool Maps (Wessel et al.
  4. default-param : default parameters for paths, input files and region configuration
  5. get_catalogue.sh : this script download [earthquake NOA catalogue](http://www.gein.noa.gr/services/full_catalogue.php)  and [fault database (Ganas et al., 2020)](http://www.gein.noa.gr/services/GPSData/1_NOAFaults/)
 
-Documentation
-============
-----------
+# Documentation
 
  - Be sure that gmt is installed on your computer
  - Configure file *default-param*.
 
-If you like to use topography you can download world DEM from [here](https://www.ngdc.noaa.gov/mgg/global/global.html)
+If you'd like to use topography, you can download world DEM from [here](https://www.ngdc.noaa.gov/mgg/global/global.html)
  
 ```
 # //////////////////
@@ -49,47 +50,50 @@ frame=2
 ```
 For main scripts help function run:
 ```
->$ ./plot_eq.sh -h OR > $ ./plot_eq_proj.sh -h
+  $> ./plot_eq.sh -h 
+  ## (or)
+  $> ./plot_eq_proj.sh -h
 ``` 
 **plot_eq.sh**
 
 **MAIN OPTIONS**
 
- Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg 
+ Usage   : plot_eq.sh -r west east south north | -topo | -o [output] | -jpg
 
- - r [:= region] region to plot west east south north (default Greece) use: -r west east south north projscale frame
- - mt [:= map title] title map default none use quotes
+ - r      [:= region] region to plot west east south north (default Greece) use: -r west east south north projscale frame
+ - mt     [:= map title] title map default none use quotes
  - updcat [:= update earthquake catalogue] 
- - topo [:= topography] use DEM topography
+ - topo   [:= topography] use DEM topography
  - faults [:= faults] plot NOA fault database
  - histeq [:= historic eq ] plot historical eq via papazachos catalogue
  
 **EARTHQUAKE OPTIONS**
- - minmw [:= minimum magnitude]  bug use only int
- - maxmw [:= maximum magnitude]  bug use only int
+ - minmw  [:= minimum magnitude]  bug use only int
+ - maxmw  [:= maximum magnitude]  bug use only int
  - starty [:= start year] 
- - stopy [:= stop year] 
+ - stopy  [:= stop year] 
  
 **OTHER OPRTIONS**
- - o [:= output] name of output files
- - l [:=labels] plot labels
- - leg [:=legend] insert legends
+ - o    [:= output] name of output files
+ - l    [:=labels] plot labels
+ - leg  [:=legend] insert legends
  - logo [:=logo] plot logo
  - jpg : convert eps file to jpg
- - h [:= help] help menu
+ - h    [:= help] help menu
  
+
  Exit Status:    1 -> help message or error
  
  Exit Status: >= 0 -> sucesseful exit
 
-example:
+## Example:
 ```
 $ ./plot_eq.sh -topo -faults -jpg -leg
 ```
 ![output plot of Example](https://raw.githubusercontent.com/demanasta/plot_eq/master/Example1.jpg)
 
+![output plot of Example](https://raw.githubusercontent.com/demanasta/plot_eq/master/Example1.jpg)
 
-----------
 ----------
 **plot_eq_proj.sh**
 In these script added an optio to plot rofile of earthquakes
@@ -113,14 +117,16 @@ depth: depth of profile
 - 21-1-2015: online version is available
 - 03-8-2023: update to GMT v6.3.0, bug fixed
 
-References
-=========
+# References
+
 Athanassios Ganas. (2023). NOAFAULTS KMZ layer Version 5.0 (V5.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.8075517
+
+Ganas Athanassios, Oikonomou Athanassia I., and Tsimi Christina, 2013. NOAFAULTS: a digital database for active faults in Greece. Bulletin of the Geological Society of Greece, vol. XLVII and Proceedings of the 13th International Congress, Chania, Sept. 2013.
 
 Wessel, P., Luis, J. F., Uieda, L., Scharroo, R., Wobbe, F., Smith, W. H. F., & Tian, D. (2019). The Generic Mapping Tools version 6. Geochemistry, Geophysics, Geosystems, 20, 5556–5564. https://doi.org/10.1029/2019GC008515
 
-Contact
-=========
+# Contact
+
 Dimitris Anastasiou, danastasiou@mail.ntua.gr
 
 Xanthos Papanikolaou, xanthos@mail.ntua.gr
