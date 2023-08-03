@@ -5,7 +5,7 @@ This repository includes bash scripts that use [Generic Tool Maps (Wessel et al.
 
 <!-- [![Build Status](https://api.travis-ci.org/kks32/phd-thesis-template.svg)](https://travis-ci.org/kks32/phd-thesis-template) -->
 [![License GPL-3.0](http://img.shields.io/badge/license-GPL-brightgreen.svg)](LICENSE)
-[![Version](http://img.shields.io/badge/version-1.0-brightgreen.svg)](https://github.com/demanasta/plot_eq/releases/latest)
+[![Version](http://img.shields.io/badge/version-2.0-brightgreen.svg)](https://github.com/demanasta/plot_eq/releases/latest)
 
 
 ----------
@@ -106,6 +106,11 @@ Lmin, Lmax: Profile Length start-stop
 
 Wmin, Wmax: Profile width on the two sides of profile
 depth: depth of profile
+
+# Updates
+
+- 21-1-2015: online version is available
+- 03-8-2023: update to GMT v6.3.0, bug fixed
 
 References
 =========
