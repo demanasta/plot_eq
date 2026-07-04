@@ -16,10 +16,14 @@ if ! wget -q -O full_NOA.catalogue \
 fi
 
 echo "downloading NOA's faults info; this may take a while ..."
-if ! wget -q -O NOAFaults_v1.gmt \
-            http://www.gein.noa.gr/services/GPSData/1_NOAFaults/NOAFaults_v1.0.gmt ; then
+if ! wget -q -O NOAFaults_v7.gmt \
+             https://zenodo.org/records/16728922/files/NOAFaults_v7.0.gmt ; then
     echo 1>&2 "Error. Failed to download NOA's faults info."
     exit 2
 fi
 
 exit 0
+
+# https://zenodo.org/records/16728922
+## https://zenodo.org/records/16728922/files/NOAFaults_v7.0.gmt
+## http://www.gein.noa.gr/services/GPSData/1_NOAFaults/NOAFaults_v1.0.gmt
